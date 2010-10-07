@@ -49,7 +49,10 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChildA.cs" />
+    <Compile Include="ChildB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RootDocument.cs" />
     <Compile Include="UndoTests.cs" />
   </ItemGroup>
   <ItemGroup>
