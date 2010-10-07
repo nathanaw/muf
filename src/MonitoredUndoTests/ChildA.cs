@@ -41,6 +41,7 @@ namespace MonitoredUndoTests
                 if (value == _Name)
                     return;
 
+                // This line will log the property change with the undo framework.
                 DefaultChangeFactory.OnChanging(this, "Name", _Name, value);
 
                 _Name = value;
@@ -57,6 +58,9 @@ namespace MonitoredUndoTests
             {
                 if (value == _Root)
                     return;
+
+                // This line will log the property change with the undo framework.
+                DefaultChangeFactory.OnChanging(this, "Root", _Root, value);
 
                 _Root = value;
                 OnPropertyChanged("Root");

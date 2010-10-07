@@ -16,8 +16,8 @@ namespace MonitoredUndoTests
 
         public RootDocument()
         {
-            this.Bs = new ObservableCollection<ChildB>();
-            this.Bs.CollectionChanged += Bs_CollectionChanged;
+            _Bs = new ObservableCollection<ChildB>();
+            _Bs.CollectionChanged += Bs_CollectionChanged;
         }
 
         #endregion
@@ -34,6 +34,7 @@ namespace MonitoredUndoTests
 
                 value.Root = this;
 
+                // This line will log the property change with the undo framework.
                 DefaultChangeFactory.OnChanging(this, "A", _A, value);
 
                 _A = value;
@@ -45,14 +46,6 @@ namespace MonitoredUndoTests
         public ObservableCollection<ChildB> Bs
         {
             get { return _Bs; }
-            set
-            {
-                if (value == _Bs)
-                    return;
-
-                _Bs = value;
-                OnPropertyChanged("Bs");
-            }
         }
 
         #endregion
@@ -67,6 +60,7 @@ namespace MonitoredUndoTests
                 foreach (ChildB item in e.OldItems)
                     item.Root = null;
 
+            // This line will log the collection change with the undo framework.
             DefaultChangeFactory.OnCollectionChanged(this, "Bs", this.Bs, e);
         }
 
