@@ -64,6 +64,15 @@ namespace MonitoredUndoTests
         }
 
         #endregion
+        #region ISupportsUndo Members
+
+        public object GetUndoRoot()
+        {
+            return this.Root;
+        }
+
+        #endregion
+
         #region INotifyPropertyChanged
 
         /// <summary>
@@ -119,14 +128,6 @@ namespace MonitoredUndoTests
                 msg = String.Format(msg, propertyName, type.FullName);
                 System.Diagnostics.Debug.Fail(msg);
             }
-        }
-
-        #endregion
-        #region ISupportsUndo Members
-
-        public object GetUndoRoot()
-        {
-            return this.Root;
         }
 
         #endregion

@@ -56,6 +56,30 @@ namespace MonitoredUndoTests
         }
 
         #endregion
+        #region Collection Changed Handlers
+
+        void Bs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                foreach (ChildB item in e.NewItems)
+                    item.Root = this;
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+                foreach (ChildB item in e.OldItems)
+                    item.Root = null;
+
+            DefaultChangeFactory.OnCollectionChanged(this, "Bs", this.Bs, e);
+        }
+
+        #endregion
+        #region ISupportsUndo Members
+
+        public object GetUndoRoot()
+        {
+            return this;
+        }
+
+        #endregion
+
         #region INotifyPropertyChanged
 
         /// <summary>
@@ -111,29 +135,6 @@ namespace MonitoredUndoTests
                 msg = String.Format(msg, propertyName, type.FullName);
                 System.Diagnostics.Debug.Fail(msg);
             }
-        }
-
-        #endregion
-        #region Collection Changed Handlers
-
-        void Bs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-                foreach (ChildB item in e.NewItems)
-                    item.Root = this;
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-                foreach (ChildB item in e.OldItems)
-                    item.Root = null;
-
-            DefaultChangeFactory.OnCollectionChanged(this, "Bs", this.Bs, e);
-        }
-
-        #endregion
-        #region ISupportsUndo Members
-
-        public object GetUndoRoot()
-        {
-            return this;
         }
 
         #endregion
