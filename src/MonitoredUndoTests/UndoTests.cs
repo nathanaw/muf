@@ -93,6 +93,38 @@ namespace MonitoredUndoTests
         }
 
         [TestMethod]
+        public void UndoRoot_Has_CanUndo_Property()
+        {
+            Assert.AreEqual(false, UndoService.Current[Document1].CanUndo);
+
+            Document1.A.Name = "Updated1";
+
+            Assert.AreEqual(true, UndoService.Current[Document1].CanUndo);
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual(false, UndoService.Current[Document1].CanUndo);
+        }
+
+        [TestMethod]
+        public void UndoRoot_Has_CanRedo_Property()
+        {
+            Assert.AreEqual(false, UndoService.Current[Document1].CanRedo);
+
+            Document1.A.Name = "Updated1";
+
+            Assert.AreEqual(false, UndoService.Current[Document1].CanRedo);
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual(true, UndoService.Current[Document1].CanRedo);
+
+            UndoService.Current[Document1].Redo();
+
+            Assert.AreEqual(false, UndoService.Current[Document1].CanRedo);
+        }
+
+        [TestMethod]
         public void UndoRoot_Supports_Adding_ChangeSets_Directly()
         {
             var change = new DelegateChange(Document1.A,
