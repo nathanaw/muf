@@ -1,15 +1,16 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Monitored Undo Framework")]
-[assembly: AssemblyDescription("Monitored Undo Framework")]
+[assembly: AssemblyTitle("Monitored Undo")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Monitored Undo Framework")]
+[assembly: AssemblyCompany("Alner LLC")]
+[assembly: AssemblyProduct("Monitored Undo for WP7")]
 [assembly: AssemblyCopyright("Copyright © Alner LLC 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +21,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1f886c6f-4f95-4789-8d57-5fcede8b9484")]
+[assembly: Guid("4b494cbd-3b70-4aab-b4cf-f827066a1a6a")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,8 +30,9 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers 
+// You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: CLSCompliant(true)]

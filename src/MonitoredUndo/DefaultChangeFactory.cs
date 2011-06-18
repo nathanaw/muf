@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.Specialized;
 using System.Collections;
+using System.Globalization;
 
 namespace MonitoredUndo
 {
@@ -116,8 +117,10 @@ namespace MonitoredUndo
 
                     break;
 
+#if !SILVERLIGHT
                 case NotifyCollectionChangedAction.Move:
                     throw new NotSupportedException("Undoing collection index changes is not implemented.");
+#endif
 
                 case NotifyCollectionChangedAction.Replace:
                     throw new NotSupportedException("Undoing collection replace changes is not implemented.");
@@ -205,7 +208,7 @@ namespace MonitoredUndo
 
         public override string ToString()
         {
-            return string.Format("Tuple of '{0}', '{1}'", m_One, m_Two);
+            return string.Format(CultureInfo.CurrentCulture, "Tuple of '{0}', '{1}'", m_One, m_Two);
         }
 
 
@@ -261,7 +264,7 @@ namespace MonitoredUndo
 
         public override string ToString()
         {
-            return string.Format("Tuple of '{0}', '{1}', '{2}'", m_One, m_Two, m_Three);
+            return string.Format(CultureInfo.CurrentCulture, "Tuple of '{0}', '{1}', '{2}'", m_One, m_Two, m_Three);
         }
 
         internal static int CombineHashCodes(int h1, int h2)

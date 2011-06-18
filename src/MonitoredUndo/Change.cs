@@ -31,10 +31,10 @@ namespace MonitoredUndo
         /// This is used when the undo UndoRoot has started a batch, or when the UndoRoot.ConsolidateChangesForSameInstance is true.
         /// A string will work, but should be sufficiently unique within the scope of changes that affect this Target instance.
         /// Another good option is to use the Tuple<> class to uniquely identify the change. The Tuple could contain
-        /// the object, and a string reprsenting the property name. For a collection change, you might include the 
+        /// the object, and a string representing the property name. For a collection change, you might include the 
         /// instance, the property name, and the item added/removed from the collection.
         /// </param>
-        public Change(object target, object changeKey)
+        protected Change(object target, object changeKey)
         {
             _Target = target; // new WeakReference(target);
             _ChangeKey = changeKey;
@@ -142,7 +142,7 @@ namespace MonitoredUndo
         /// This is used when the undo UndoRoot has started a batch, or when the UndoRoot.ConsolidateChangesForSameInstance is true.
         /// A string will work, but should be sufficiently unique within the scope of changes that affect this Target instance.
         /// Another good option is to use the Tuple<> class to uniquely identify the change. The Tuple could contain
-        /// the object, and a string reprsenting the property name. For a collection change, you might include the 
+        /// the object, and a string representing the property name. For a collection change, you might include the 
         /// instance, the property name, and the item added/removed from the collection.
         /// </param>
         public DelegateChange(object target, Action undoAction, Action redoAction, object changeKey)

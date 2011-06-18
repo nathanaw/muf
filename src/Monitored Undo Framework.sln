@@ -5,6 +5,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoredUndo", "MonitoredU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoredUndoTests", "MonitoredUndoTests\MonitoredUndoTests.csproj", "{876B42D2-67E8-45B5-886C-9AB8C75E76C4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C8B148F-D9DF-4838-AA00-E267C3A9172A}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		Monitored Undo Framework.vsmdi = Monitored Undo Framework.vsmdi
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 3
@@ -17,6 +23,9 @@ Global
 		SccProjectUniqueName2 = MonitoredUndoTests\\MonitoredUndoTests.csproj
 		SccProjectName2 = MonitoredUndoTests
 		SccLocalPath2 = MonitoredUndoTests
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Monitored Undo Framework.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
