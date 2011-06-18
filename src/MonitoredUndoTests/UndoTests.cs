@@ -550,6 +550,104 @@ namespace MonitoredUndoTests
         //{
         //}
 
+
+        [TestMethod]
+        public void ChangeKey_Of_Objects_Are_Equal()
+        {
+            var o1 = new object();
+            var o2 = new object();
+
+            CompareChangeKeys(o1, o2, o1, o2);
+        }
+
+        [TestMethod]
+        public void ChangeKey_Of_Object_And_Int_Are_Equal()
+        {
+            var o1 = new object();
+            CompareChangeKeys(o1, 5, o1, 5);
+        }
+
+        [TestMethod]
+        public void ChangeKey_Of_Int_And_Int_Are_Equal()
+        {
+            CompareChangeKeys(1, 5, 1, 5);
+        }
+
+        [TestMethod]
+        public void ChangeKey_Of_String_And_Int_Are_Equal()
+        {
+            CompareChangeKeys("One", 5, "One", 5);
+        }
+
+        [TestMethod]
+        public void ChangeKey_Of_Different_Objects_Are_Equal()
+        {
+            try
+            {
+                var o1 = new object();
+                var o2 = new object();
+                var o3 = new object();
+
+                CompareChangeKeys(o1, o2, o3, o2);
+
+                Assert.Fail("Expected failed assertion");
+            }
+            catch { }
+        }
+
+        [TestMethod]
+        public void ChangeKey_Of_Different_Object_And_Int_Are_Equal()
+        {
+            try
+            {
+                var o1 = new object();
+                CompareChangeKeys(o1, 5, o1, 10);
+
+                Assert.Fail("Expected failed assertion");
+            }
+            catch { }
+        }
+
+        [TestMethod]
+        public void ChangeKey_Of_Different_Int_And_Int_Are_Equal()
+        {
+            try
+            {
+                CompareChangeKeys(1, 5, 2, 5);
+
+                Assert.Fail("Expected failed assertion");
+            }
+            catch { }
+        }
+
+        [TestMethod]
+        public void ChangeKey_Of_Different_String_And_Int_Are_Equal()
+        {
+            try
+            {
+                CompareChangeKeys("One", 5, "Two", 5);
+
+                Assert.Fail("Expected failed assertion");
+            }
+            catch { }
+        }
+
+
+        private static void CompareChangeKeys<T1, T2>(T1 a1, T2 a2, T1 b1, T2 b2)
+        {
+            var key1 = new ChangeKey<T1, T2>(a1, a2);
+            var key2 = new ChangeKey<T1, T2>(b1, b2);
+
+            Assert.AreEqual(key1, key2);
+            Assert.AreEqual(key1, key2);
+            Assert.IsTrue(key1.Equals(key2));
+            Assert.AreEqual(key1.GetHashCode(), key2.GetHashCode());
+            Assert.AreEqual(key1.ToString(), key2.ToString());
+        }
+
+
+
+
         #endregion
 
     }

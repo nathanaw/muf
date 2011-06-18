@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using MonitoredUndo;
+using System.Collections.Specialized;
 
 
 namespace MonitoredUndoTests
@@ -51,7 +52,7 @@ namespace MonitoredUndoTests
         #endregion
         #region Collection Changed Handlers
 
-        void Bs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        void Bs_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
                 foreach (ChildB item in e.NewItems)
