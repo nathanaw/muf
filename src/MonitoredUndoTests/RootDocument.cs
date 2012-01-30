@@ -62,7 +62,7 @@ namespace MonitoredUndoTests
                     item.Root = null;
 
             // This line will log the collection change with the undo framework.
-            DefaultChangeFactory.OnCollectionChanged(this, "Bs", this.Bs, e);
+            DefaultChangeFactory.OnCollectionChanged(this, "Bs", this.Bs, e, "Collection of B's Changed");
         }
 
         #endregion

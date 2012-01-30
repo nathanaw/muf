@@ -37,8 +37,8 @@ namespace MonitoredUndoTests
             Document2 = new RootDocument();
             Document2.A = new ChildA() { Name = "Document2.ChildA" };
             Document2.Bs.Add(new ChildB() { Name = "Document2.ChildB[0]" });
-            Document2.Bs.Add(new ChildB() { Name = "Document3.ChildB[1]" });
-            Document2.Bs.Add(new ChildB() { Name = "Document4.ChildB[2]" });
+            Document2.Bs.Add(new ChildB() { Name = "Document2.ChildB[1]" });
+            Document2.Bs.Add(new ChildB() { Name = "Document2.ChildB[2]" });
 
             UndoService.Current.Clear();
         }
@@ -90,6 +90,29 @@ namespace MonitoredUndoTests
             Document1.A.Name = "Updated2";
 
             Assert.AreEqual(2, UndoService.Current[Document1].UndoStack.Count());
+        }
+
+        [TestMethod]
+        public void UndoRoot_Supports_Adding_ChangeSets_With_Description()
+        {
+            Document1.A.Name = "Updated1";
+            Document1.A.Name = "Updated2";
+
+            Assert.AreEqual(2, UndoService.Current[Document1].UndoStack.Count());
+
+            var change = UndoService.Current[Document1].UndoStack.FirstOrDefault();
+            Assert.AreEqual("Name changed.", change.Description);
+        }
+
+        [TestMethod]
+        public void UndoRoot_Supports_Adding_Collection_ChangeSets_With_Description()
+        {
+            Document1.Bs.Add(new ChildB() { Name = "Document1.ChildB[3]" });
+
+            Assert.AreEqual(1, UndoService.Current[Document1].UndoStack.Count());
+
+            var change = UndoService.Current[Document1].UndoStack.FirstOrDefault();
+            Assert.AreEqual("Collection of B's Changed", change.Description);
         }
 
         [TestMethod]
