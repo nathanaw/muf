@@ -66,6 +66,9 @@
     <Compile Include="..\..\..\MonitoredUndo\Change.cs">
       <Link>Change.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\MonitoredUndo\ChangeKey.cs">
+      <Link>ChangeKey.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\MonitoredUndo\ChangeSet.cs">
       <Link>ChangeSet.cs</Link>
     </Compile>

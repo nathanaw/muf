@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>MUF</id>
+    <version>1.0</version>
+    <title>Monitored Undo Framework</title>
+    <authors>Nathan Allen-Wagner</authors>
+    <owners />
+    <licenseUrl>http://muf.codeplex.com/license</licenseUrl>
+    <projectUrl>http://muf.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Monitored Undo is an Undo / Redo framework that makes it simple for .NET developers to add Undo capabilities to an application. The framework "monitors" changes to the model, keeps a history of undo / redo operations, and assists with applying an undo back to the model.</description>
+    <summary>MIT License</summary>
+  </metadata>
+  <files>
+    <file src="content\Monitored Undo Documentation.docx" target="content\Monitored Undo Documentation.docx" />
+    <file src="lib\net35\MonitoredUndo35.dll" target="lib\net35\MonitoredUndo35.dll" />
+    <file src="lib\net35\MonitoredUndo35.pdb" target="lib\net35\MonitoredUndo35.pdb" />
+    <file src="lib\net40\MonitoredUndo.dll" target="lib\net40\MonitoredUndo.dll" />
+    <file src="lib\net40\MonitoredUndo.pdb" target="lib\net40\MonitoredUndo.pdb" />
+    <file src="lib\sl3-wp\MonitoredUndoWP7.dll" target="lib\sl3-wp\MonitoredUndoWP7.dll" />
+    <file src="lib\sl3-wp\MonitoredUndoWP7.pdb" target="lib\sl3-wp\MonitoredUndoWP7.pdb" />
+    <file src="lib\sl40\MonitoredUndoSL4.dll" target="lib\sl40\MonitoredUndoSL4.dll" />
+    <file src="lib\sl40\MonitoredUndoSL4.pdb" target="lib\sl40\MonitoredUndoSL4.pdb" />
+  </files>
+</package>
