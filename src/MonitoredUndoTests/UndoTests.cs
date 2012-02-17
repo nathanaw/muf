@@ -23,7 +23,7 @@ namespace MonitoredUndoTests
         public void TestSetup()
         {
             Document1 = new RootDocument();
-            Document1.A = new ChildA() { Name = "Document1.ChildA" };
+            Document1.A = new ChildA() { Name = "Document1.ChildA", UndoableSometimes = "Value1" };
             Document1.Bs.Add(new ChildB() { Name = "Document1.ChildB[0]" });
             Document1.Bs.Add(new ChildB() { Name = "Document1.ChildB[1]" });
             Document1.Bs.Add(new ChildB() { Name = "Document1.ChildB[2]" });
@@ -35,7 +35,7 @@ namespace MonitoredUndoTests
             Assert.AreSame(Document1, Document1.Bs[2].Root);
 
             Document2 = new RootDocument();
-            Document2.A = new ChildA() { Name = "Document2.ChildA" };
+            Document2.A = new ChildA() { Name = "Document2.ChildA", UndoableSometimes = "Value2" };
             Document2.Bs.Add(new ChildB() { Name = "Document2.ChildB[0]" });
             Document2.Bs.Add(new ChildB() { Name = "Document2.ChildB[1]" });
             Document2.Bs.Add(new ChildB() { Name = "Document2.ChildB[2]" });
@@ -272,6 +272,22 @@ namespace MonitoredUndoTests
             UndoService.Current[Document1].Undo();
 
             Assert.AreEqual(firstChange, Document1.A.Name);
+        }
+
+        [TestMethod]
+        public void UndoRoot_Can_Undo_the_Last_ChangeSet_With_Conditional_Undo_On_A_Property()
+        {
+            var orig = Document1.A.Name;
+            var firstChange = "DISABLE_UNDO";
+            var secondChange = "New Value";
+
+            Document1.A.Name = firstChange;
+            Document1.A.UndoableSometimes = secondChange;
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual(firstChange, Document1.A.Name);
+            Assert.AreEqual(secondChange, Document1.A.UndoableSometimes);
         }
 
         [TestMethod]

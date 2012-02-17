@@ -9,7 +9,7 @@ using MonitoredUndo;
 
 namespace MonitoredUndoTests
 {
-    public class ChildA : INotifyPropertyChanged, ISupportsUndo
+    public class ChildA : INotifyPropertyChanged, ISupportsUndo, IUndoMetadata
     {
         #region Constructors
 
@@ -67,6 +67,28 @@ namespace MonitoredUndoTests
             }
         }
 
+
+
+        // This property is undoable, as long as the Name property is not "DISABLE_UNDO".
+        // This shows the usage of the IUndoMetadata interface, which can be used to determine whether
+        // a property is undoable.
+        private string _UndoableSometimes;
+        public string UndoableSometimes
+        {
+            get { return _UndoableSometimes; }
+            set
+            {
+                if (value == _UndoableSometimes)
+                    return;
+
+                // This line will log the property change with the undo framework.
+                DefaultChangeFactory.OnChanging(this, "UndoableSometimes", _UndoableSometimes, value);
+
+                _UndoableSometimes = value;
+                OnPropertyChanged("UndoableSometimes");
+            }
+        }
+
         #endregion
         #region ISupportsUndo Members
 
@@ -76,7 +98,25 @@ namespace MonitoredUndoTests
         }
 
         #endregion
+        #region IUndoMetadata Members
 
+        public bool CanUndoProperty(string propertyName, object oldValue, object newValue)
+        {
+            if (propertyName == "UndoableSometimes")
+            {
+                if (this.Name == "DISABLE_UNDO")
+                    return false;
+            }
+
+            return true;
+        }
+
+        public bool CanUndoCollectionChange(string propertyName, object collection, System.Collections.Specialized.NotifyCollectionChangedEventArgs args)
+        {
+            return true;
+        }
+
+        #endregion
         #region INotifyPropertyChanged
 
         /// <summary>
