@@ -57,7 +57,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 copy /y "..\releases\Latest\WP7\MonitoredUndoWP7.pdb" "..\nuget\lib\sl3-wp\MonitoredUndoWP7.pdb"
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
-..\tools\nuget.exe pack ..\nuget\MUF.1.0.nuspec -OutputDirectory ..\nuget\ -Version 1.1
+..\tools\nuget.exe pack ..\nuget\MUF.1.0.nuspec -OutputDirectory ..\nuget\ -Version 1.2
 IF %ERRORLEVEL% NEQ 0 GOTO ERROR
 
 GOTO DONE

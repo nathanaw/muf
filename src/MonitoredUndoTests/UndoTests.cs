@@ -560,34 +560,196 @@ namespace MonitoredUndoTests
         //public void DefaultChangeFactory_Supports_Reference_Type_Properties()
         //{
         //}
-        //[TestMethod]
-        //public void DefaultChangeFactory_Supports_Collection_Adds()
-        //{
-        //}
-        //[TestMethod]
-        //public void DefaultChangeFactory_Supports_Collection_MultipleAdds()
-        //{
-        //}
-        //[TestMethod]
-        //public void DefaultChangeFactory_Supports_Collection_Removes()
-        //{
-        //}
-        //[TestMethod]
-        //public void DefaultChangeFactory_Supports_Collection_MulitpleRemoves()
-        //{
-        //}
-        //[TestMethod]
-        //public void DefaultChangeFactory_Supports_Collection_Reset()
-        //{
-        //}
-        //[TestMethod]
-        //public void DefaultChangeFactory_Supports_Collection_Move()
-        //{
-        //}
-        //[TestMethod]
-        //public void DefaultChangeFactory_Supports_Collection_Replace()
-        //{
-        //}
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Collection_Adds()
+        {
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            Document1.Bs.Insert(2, new ChildB() { Name = "Document1.ChildB[2a]" });
+
+            Assert.AreEqual(4, Document1.Bs.Count);
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual(3, Document1.Bs.Count);
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            UndoService.Current[Document1].Redo();
+
+            Assert.AreEqual(4, Document1.Bs.Count);
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2a]", Document1.Bs[2].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[3].Name);
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Collection_MultipleAdds()
+        {
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            using (new UndoBatch(Document1, "Multiple Adds", false))
+            {
+                Document1.Bs.Insert(2, new ChildB() { Name = "Document1.ChildB[2a]" });
+                Document1.Bs.Insert(2, new ChildB() { Name = "Document1.ChildB[2b]" });
+                Document1.Bs.Add(new ChildB() { Name = "Document1.ChildB[2c]" });
+            }
+
+            Assert.AreEqual(6, Document1.Bs.Count);
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2b]", Document1.Bs[2].Name);
+            Assert.AreEqual("Document1.ChildB[2a]", Document1.Bs[3].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[4].Name);
+            Assert.AreEqual("Document1.ChildB[2c]", Document1.Bs[5].Name);
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual(3, Document1.Bs.Count);
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            UndoService.Current[Document1].Redo();
+
+            Assert.AreEqual(6, Document1.Bs.Count);
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2b]", Document1.Bs[2].Name);
+            Assert.AreEqual("Document1.ChildB[2a]", Document1.Bs[3].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[4].Name);
+            Assert.AreEqual("Document1.ChildB[2c]", Document1.Bs[5].Name);
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Collection_Removes()
+        {
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            Document1.Bs.RemoveAt(1);
+
+            Assert.AreEqual(2, Document1.Bs.Count);
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual(3, Document1.Bs.Count);
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            UndoService.Current[Document1].Redo();
+
+            Assert.AreEqual(2, Document1.Bs.Count);
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[1].Name);
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Collection_MulitpleRemoves()
+        {
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            using (new UndoBatch(Document1, "Multiple Removes", false))
+            {
+                Document1.Bs.RemoveAt(0);
+                Document1.Bs.RemoveAt(1);
+                Document1.Bs.RemoveAt(0);
+            }
+
+            Assert.AreEqual(0, Document1.Bs.Count);
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual(3, Document1.Bs.Count);
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            UndoService.Current[Document1].Redo();
+
+            Assert.AreEqual(0, Document1.Bs.Count);
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Collection_Reset()
+        {
+            try
+            {
+                DefaultChangeFactory.ThrowExceptionOnCollectionResets = true;
+                Document1.Bs.Clear();
+                Assert.Fail("Should have throw NotSupportedException");
+            }
+            catch (NotSupportedException) {}
+
+            // Nothing added to undo stack.
+            Assert.AreEqual(0, UndoService.Current[Document1].UndoStack.Count());
+
+            // Repopulate the collection, and then clear the undo stack.
+            Document1.Bs.Add(new ChildB() { Name = "New B1" });
+            Document1.Bs.Add(new ChildB() { Name = "New B2" });
+            UndoService.Current[Document1].Clear();
+            
+            DefaultChangeFactory.ThrowExceptionOnCollectionResets = false;
+            Document1.Bs.Clear();
+
+            // Nothing added to undo stack.
+            Assert.AreEqual(0, UndoService.Current[Document1].UndoStack.Count());
+            Assert.AreEqual(0, Document1.Bs.Count);
+
+            UndoService.Current[Document1].Undo();
+            Assert.AreEqual(0, Document1.Bs.Count);
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Collection_Move()
+        {
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            Document1.Bs.Move(0, 1);
+
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Collection_Replace()
+        {
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            var newB = new ChildB() { Name = "New B" };
+            Document1.Bs[1] = newB;
+
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("New B", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual("Document1.ChildB[0]", Document1.Bs[0].Name);
+            Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
+            Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
+        }
 
 
         [TestMethod]
