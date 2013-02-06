@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoredUndoWP7", "MonitoredUndoWP7\MonitoredUndoWP7.csproj", "{FBBD4E4E-282D-476B-90A4-69B44116F3E3}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs19
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = MonitoredUndoWP7\\MonitoredUndoWP7.csproj
+		SccProjectName1 = MonitoredUndoWP7
+		SccLocalPath1 = MonitoredUndoWP7
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBBD4E4E-282D-476B-90A4-69B44116F3E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBBD4E4E-282D-476B-90A4-69B44116F3E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBBD4E4E-282D-476B-90A4-69B44116F3E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBBD4E4E-282D-476B-90A4-69B44116F3E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

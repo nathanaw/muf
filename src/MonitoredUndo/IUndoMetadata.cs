@@ -4,7 +4,7 @@ namespace MonitoredUndo
 {
 
     /// <summary>
-    /// Can be used by undo services to determine whether the specififed field or 
+    /// Can be used by undo services to determine whether the specified field or 
     /// collection item should be tracked for undo.
     /// Useful when the undo changes are created by a consolidated helper class.
     /// </summary>
@@ -12,7 +12,7 @@ namespace MonitoredUndo
     {
 
         /// <summary>
-        /// Can be used by undo services to determine whether the specififed field can be undone.
+        /// Can be used by undo services to determine whether the specified field can be undone.
         /// Useful when the undo changes are created by a consolidated helper class.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed.</param>
@@ -22,7 +22,7 @@ namespace MonitoredUndo
         bool CanUndoProperty(string propertyName, object oldValue, object newValue);
 
         /// <summary>
-        /// Can be used by undo services to determine whether the specififed field can be undone.
+        /// Can be used by undo services to determine whether the specified field can be undone.
         /// Useful when the undo changes are created by a consolidated helper class.
         /// </summary>
         /// <param name="propertyName">The name of the property that changed.</param>
