@@ -42,7 +42,7 @@ namespace MonitoredUndoTests
                     return;
 
                 // This line will log the property change with the undo framework.
-                DefaultChangeFactory.OnChanging(this, "Name", _Name, value);
+                DefaultChangeFactory.OnChanging(this, "Name", _Name, value, "Name changed.");
 
                 _Name = value;
                 OnPropertyChanged("Name");

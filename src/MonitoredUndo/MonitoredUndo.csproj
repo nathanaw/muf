@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Change.cs" />
+    <Compile Include="ChangeKey.cs" />
     <Compile Include="ChangeSet.cs" />
     <Compile Include="DefaultChangeFactory.cs" />
     <Compile Include="ISupportsUndo.cs" />
