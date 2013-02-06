@@ -5,12 +5,22 @@ using System.Text;
 using System.Collections.Specialized;
 using System.Collections;
 using System.Globalization;
+using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace MonitoredUndo
 {
 
     public static class DefaultChangeFactory
     {
+
+        public static bool ThrowExceptionOnCollectionResets
+        {
+            get { return _ThrowExceptionOnCollectionResets; }
+            set { _ThrowExceptionOnCollectionResets = value; }
+        }
+        private static bool _ThrowExceptionOnCollectionResets = true;
+
 
         /// <summary>
         /// Construct a Change instance with actions for undo / redo.
@@ -102,10 +112,12 @@ namespace MonitoredUndo
                 case NotifyCollectionChangedAction.Add:
                     foreach (var item in e.NewItems)
                     {
+                        var element = item;  // capture the variable for the closure.
+                        var index = e.NewStartingIndex; // capture the variable for the closure.
                         var change = new DelegateChange(
                                             instance,
-                                            () => ((IList)collection).Remove(item),
-                                            () => ((IList)collection).Add(item),
+                                            () => ((IList)collection).Remove(element),
+                                            () => ((IList)collection).Insert(index, element),
                                             new ChangeKey<object, string, object>(instance, propertyName, item)
                                         );
 
@@ -117,10 +129,12 @@ namespace MonitoredUndo
                 case NotifyCollectionChangedAction.Remove:
                     foreach (var item in e.OldItems)
                     {
+                        var element = item;  // capture the variable for the closure.
+                        var index = e.OldStartingIndex; // capture the variable for the closure.
                         var change = new DelegateChange(
                                             instance,
-                                            () => ((IList)collection).Add(item),
-                                            () => ((IList)collection).Remove(item),
+                                            () => ((IList)collection).Insert(index, element),
+                                            () => ((IList)collection).Remove(element),
                                             new ChangeKey<object, string, object>(instance, propertyName, item)
                                         );
 
@@ -131,14 +145,48 @@ namespace MonitoredUndo
 
 #if !SILVERLIGHT
                 case NotifyCollectionChangedAction.Move:
-                    throw new NotSupportedException("Undoing collection index changes is not implemented.");
-#endif
+                    int newIndex = e.NewStartingIndex;
+                    int oldIndex = e.OldStartingIndex;
 
+                    var moveChange = new DelegateChange(
+                                            instance,
+                                            () => collection.GetType().GetMethod("Move").Invoke(collection, new object[] { newIndex, oldIndex }),
+                                            () => collection.GetType().GetMethod("Move").Invoke(collection, new object[] { oldIndex, newIndex }),
+                                            new ChangeKey<object, string, object>(instance, propertyName, new ChangeKey<int, int>(oldIndex, newIndex))
+                                        );
+                    ret.Add(moveChange);
+                    break;
+#endif
                 case NotifyCollectionChangedAction.Replace:
-                    throw new NotSupportedException("Undoing collection replace changes is not implemented.");
+                    var replaceChange = new DelegateChange(
+                                            instance,
+                                            () => ((IList)collection)[e.NewStartingIndex] = e.OldItems[0],
+                                            () => ((IList)collection)[e.NewStartingIndex] = e.NewItems[0],
+                                            new ChangeKey<object, string, object>(instance, propertyName, new ChangeKey<object, object>(e.OldItems[0], e.NewItems[0]))
+                                        );
+                    ret.Add(replaceChange);
+                    break;
 
                 case NotifyCollectionChangedAction.Reset:
-                    throw new NotSupportedException("Undoing collection reset changes is not implemented.");
+                    if (ThrowExceptionOnCollectionResets)
+                        throw new NotSupportedException("Undoing collection resets is not supported via the CollectionChanged event. The collection is already null, so the Undo system has no way to capture the set of elements that were previously in the collection.");
+                    else
+                        break;
+
+                    //IList collectionClone = collection.GetType().GetConstructor(new Type[] { collection.GetType() }).Invoke(new object[] { collection }) as IList;
+
+                    //var resetChange = new DelegateChange(
+                    //                        instance,
+                    //                        () =>
+                    //                        {
+                    //                            for (int i = 0; i < collectionClone.Count; i++) //for instead foreach to preserve the order
+                    //                                ((IList)collection).Add(collectionClone[i]);
+                    //                        },
+                    //                        () => collection.GetType().GetMethod("Clear").Invoke(collection, null),
+                    //                        new ChangeKey<object, string, object>(instance, propertyName, collectionClone)
+                    //                    );
+                    //ret.Add(resetChange);
+                    //break;
 
                 default:
                     throw new NotSupportedException();
@@ -146,7 +194,6 @@ namespace MonitoredUndo
 
             return ret;
         }
-
 
         /// <summary>
         /// Construct a Change instance with actions for undo / redo.
@@ -190,7 +237,6 @@ namespace MonitoredUndo
                 undoRoot.AddChange(change, descriptionOfChange);
             }
         }
-
     }
 
 
