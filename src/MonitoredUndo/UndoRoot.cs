@@ -15,20 +15,20 @@ namespace MonitoredUndo
         #region Member Variables
 
         // WeakReference because we don't want the undo stack to keep something locked in memory.
-        private WeakReference _Root;    
+        private WeakReference _Root;
 
         // The list of undo / redo actions.
         private Stack<ChangeSet> _UndoStack;
         private Stack<ChangeSet> _RedoStack;
 
         // Tracks whether a batch (or batches) has been started.
-        private int _IsInBatchCounter = 0;  
-        
+        private int _IsInBatchCounter = 0;
+
         // Determines whether the undo framework will consolidate (or de-dupe) changes to the same property within the batch.
         private bool _ConsolidateChangesForSameInstance = false;
-        
+
         // When in a batch, changes are grouped into this ChangeSet.
-        private ChangeSet _CurrentBatchChangeSet;   
+        private ChangeSet _CurrentBatchChangeSet;
 
         // Is the system currently undoing or redoing a changeset.
         private bool _IsUndoingOrRedoing = false;
@@ -126,6 +126,22 @@ namespace MonitoredUndo
             get
             {
                 return _ConsolidateChangesForSameInstance;
+            }
+        }
+
+        public bool CanUndo
+        {
+            get
+            {
+                return _UndoStack.Count > 0;
+            }
+        }
+
+        public bool CanRedo
+        {
+            get
+            {
+                return _RedoStack.Count > 0;
             }
         }
 
@@ -333,12 +349,12 @@ namespace MonitoredUndo
             _RedoStack.Clear();
             OnRedoStackChanged();
         }
-        
+
         public void Clear()
         {
             if (IsInBatch || _IsUndoingOrRedoing)
                 throw new InvalidOperationException("Unable to clear the undo history because the system is collecting a batch of changes, or is in the process of undoing / redoing a change.");
-            
+
             _UndoStack.Clear();
             _RedoStack.Clear();
             OnUndoStackChanged();
