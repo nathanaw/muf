@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoredUndo", "MonitoredUndo\MonitoredUndo.csproj", "{FF127A9A-BACB-4BC3-99DE-9F80275A06D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoredUndoTests", "MonitoredUndoTests\MonitoredUndoTests.csproj", "{876B42D2-67E8-45B5-886C-9AB8C75E76C4}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs19
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = MonitoredUndo\\MonitoredUndo.csproj
+		SccProjectName1 = MonitoredUndo
+		SccLocalPath1 = MonitoredUndo
+		SccProjectUniqueName2 = MonitoredUndoTests\\MonitoredUndoTests.csproj
+		SccProjectName2 = MonitoredUndoTests
+		SccLocalPath2 = MonitoredUndoTests
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF127A9A-BACB-4BC3-99DE-9F80275A06D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF127A9A-BACB-4BC3-99DE-9F80275A06D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF127A9A-BACB-4BC3-99DE-9F80275A06D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF127A9A-BACB-4BC3-99DE-9F80275A06D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{876B42D2-67E8-45B5-886C-9AB8C75E76C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{876B42D2-67E8-45B5-886C-9AB8C75E76C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{876B42D2-67E8-45B5-886C-9AB8C75E76C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{876B42D2-67E8-45B5-886C-9AB8C75E76C4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
