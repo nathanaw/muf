@@ -10,16 +10,69 @@ using System.Reflection;
 
 namespace MonitoredUndo
 {
-
     public static class DefaultChangeFactory
     {
+        public static ChangeFactory Current
+        {
+            get { return _Current; }
+            set { _Current = value; }
+        }
+        private static ChangeFactory _Current = new ChangeFactory();
 
+        [Obsolete("Use instance method")]
         public static bool ThrowExceptionOnCollectionResets
+        {
+            get { return Current.ThrowExceptionOnCollectionResets; }
+            set { Current.ThrowExceptionOnCollectionResets = value; }
+        }
+
+        [Obsolete("Use instance method")]
+        public static Change GetChange(object instance, string propertyName, object oldValue, object newValue)
+        {
+            return Current.GetChange(instance, propertyName, oldValue, newValue);
+        }
+
+        [Obsolete("Use instance method")]
+        public static void OnChanging(object instance, string propertyName, object oldValue, object newValue)
+        {
+            Current.OnChanging(instance, propertyName, oldValue, newValue);
+        }
+
+        [Obsolete("Use instance method")]
+        public static void OnChanging(object instance, string propertyName, object oldValue, object newValue, string descriptionOfChange)
+        {
+            Current.OnChanging(instance, propertyName, oldValue, newValue, descriptionOfChange);
+        }
+
+        [Obsolete("Use instance method")]
+        public static IList<Change> GetCollectionChange(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e)
+        {
+            return Current.GetCollectionChange(instance, propertyName, collection, e);
+        }
+
+
+        [Obsolete("Use instance method")]
+        public static void OnCollectionChanged(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e)
+        {
+            Current.OnCollectionChanged(instance, propertyName, collection, e);
+        }
+
+        [Obsolete("Use instance method")]
+        public static void OnCollectionChanged(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e, string descriptionOfChange)
+        {
+            Current.OnCollectionChanged(instance, propertyName, collection, e, descriptionOfChange);
+        }
+    }
+
+    public class ChangeFactory
+    {
+
+        public bool ThrowExceptionOnCollectionResets
         {
             get { return _ThrowExceptionOnCollectionResets; }
             set { _ThrowExceptionOnCollectionResets = value; }
         }
-        private static bool _ThrowExceptionOnCollectionResets = true;
+        private bool _ThrowExceptionOnCollectionResets = true;
 
 
         /// <summary>
@@ -30,7 +83,7 @@ namespace MonitoredUndo
         /// <param name="oldValue">The old value of the property.</param>
         /// <param name="newValue">The new value of the property.</param>
         /// <returns>A Change that can be added to the UndoRoot's undo stack.</returns>
-        public static Change GetChange(object instance, string propertyName, object oldValue, object newValue)
+        public virtual Change GetChange(object instance, string propertyName, object oldValue, object newValue)
         {
             var undoMetadata = instance as IUndoMetadata;
             if (null != undoMetadata)
@@ -60,7 +113,7 @@ namespace MonitoredUndo
         /// <param name="propertyName">The property name that changed. (Case sensitive, used by reflection.)</param>
         /// <param name="oldValue">The old value of the property.</param>
         /// <param name="newValue">The new value of the property.</param>
-        public static void OnChanging(object instance, string propertyName, object oldValue, object newValue)
+        public virtual void OnChanging(object instance, string propertyName, object oldValue, object newValue)
         {
             OnChanging(instance, propertyName, oldValue, newValue, propertyName);
         }
@@ -73,7 +126,7 @@ namespace MonitoredUndo
         /// <param name="oldValue">The old value of the property.</param>
         /// <param name="newValue">The new value of the property.</param>
         /// <param name="descriptionOfChange">A description of this change.</param>
-        public static void OnChanging(object instance, string propertyName, object oldValue, object newValue, string descriptionOfChange)
+        public virtual void OnChanging(object instance, string propertyName, object oldValue, object newValue, string descriptionOfChange)
         {
             var supportsUndo = instance as ISupportsUndo;
             if (null == supportsUndo)
@@ -96,7 +149,7 @@ namespace MonitoredUndo
         /// <param name="collection">The collection that had an item added / removed.</param>
         /// <param name="e">The NotifyCollectionChangedEventArgs event args parameter, with info about the collection change.</param>
         /// <returns>A Change that can be added to the UndoRoot's undo stack.</returns>
-        public static IList<Change> GetCollectionChange(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e)
+        public virtual IList<Change> GetCollectionChange(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e)
         {
             var undoMetadata = instance as IUndoMetadata;
             if (null != undoMetadata)
@@ -202,7 +255,7 @@ namespace MonitoredUndo
         /// <param name="propertyName">The property name that exposes the collection that changed. (Case sensitive, used by reflection.)</param>
         /// <param name="collection">The collection that had an item added / removed.</param>
         /// <param name="e">The NotifyCollectionChangedEventArgs event args parameter, with info about the collection change.</param>
-        public static void OnCollectionChanged(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e)
+        public virtual void OnCollectionChanged(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e)
         {
             OnCollectionChanged(instance, propertyName, collection, e, propertyName);
         }
@@ -215,7 +268,7 @@ namespace MonitoredUndo
         /// <param name="collection">The collection that had an item added / removed.</param>
         /// <param name="e">The NotifyCollectionChangedEventArgs event args parameter, with info about the collection change.</param>
         /// <param name="descriptionOfChange">A description of the change.</param>
-        public static void OnCollectionChanged(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e, string descriptionOfChange)
+        public virtual void OnCollectionChanged(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e, string descriptionOfChange)
         {
             var supportsUndo = instance as ISupportsUndo;
             if (null == supportsUndo)
