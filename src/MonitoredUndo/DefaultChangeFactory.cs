@@ -103,14 +103,8 @@ namespace MonitoredUndo
                 case NotifyCollectionChangedAction.Add:
                     foreach (var item in e.NewItems)
                     {
-                        var element = item;  // capture the variable for the closure.
-                        var index = e.NewStartingIndex; // capture the variable for the closure.
-                        var change = new DelegateChange(
-                                            instance,
-                                            () => ((IList)collection).Remove(element),
-                                            () => ((IList)collection).Insert(index, element),
-                                            new ChangeKey<object, string, object>(instance, propertyName, item)
-                                        );
+                        var change = new CollectionAddChange(instance, propertyName, (IList) collection,
+                                                             e.NewStartingIndex, item);
 
                         ret.Add(change);
                     }
@@ -120,14 +114,8 @@ namespace MonitoredUndo
                 case NotifyCollectionChangedAction.Remove:
                     foreach (var item in e.OldItems)
                     {
-                        var element = item;  // capture the variable for the closure.
-                        var index = e.OldStartingIndex; // capture the variable for the closure.
-                        var change = new DelegateChange(
-                                            instance,
-                                            () => ((IList)collection).Insert(index, element),
-                                            () => ((IList)collection).Remove(element),
-                                            new ChangeKey<object, string, object>(instance, propertyName, item)
-                                        );
+                        var change = new CollectionRemoveChange(instance, propertyName, (IList) collection,
+                                                                e.OldStartingIndex, item);
 
                         ret.Add(change);
                     }
@@ -136,25 +124,16 @@ namespace MonitoredUndo
 
 #if !SILVERLIGHT
                 case NotifyCollectionChangedAction.Move:
-                    int newIndex = e.NewStartingIndex;
-                    int oldIndex = e.OldStartingIndex;
-
-                    var moveChange = new DelegateChange(
-                                            instance,
-                                            () => collection.GetType().GetMethod("Move").Invoke(collection, new object[] { newIndex, oldIndex }),
-                                            () => collection.GetType().GetMethod("Move").Invoke(collection, new object[] { oldIndex, newIndex }),
-                                            new ChangeKey<object, string, object>(instance, propertyName, new ChangeKey<int, int>(oldIndex, newIndex))
-                                        );
+                    var moveChange = new CollectionMoveChange(instance, propertyName, (IList) collection,
+                                                              e.NewStartingIndex,
+                                                              e.OldStartingIndex);
                     ret.Add(moveChange);
                     break;
 #endif
                 case NotifyCollectionChangedAction.Replace:
-                    var replaceChange = new DelegateChange(
-                                            instance,
-                                            () => ((IList)collection)[e.NewStartingIndex] = e.OldItems[0],
-                                            () => ((IList)collection)[e.NewStartingIndex] = e.NewItems[0],
-                                            new ChangeKey<object, string, object>(instance, propertyName, new ChangeKey<object, object>(e.OldItems[0], e.NewItems[0]))
-                                        );
+                    // FIXME handle multi-item replace event
+                    var replaceChange = new CollectionReplaceChange(instance, propertyName, (IList) collection,
+                                                                    e.NewStartingIndex, e.OldItems[0], e.NewItems[0]);
                     ret.Add(replaceChange);
                     break;
 
