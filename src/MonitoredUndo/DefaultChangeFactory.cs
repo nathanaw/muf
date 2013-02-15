@@ -39,16 +39,7 @@ namespace MonitoredUndo
                     return null;
             }
 
-            var change = new DelegateChange(
-                                instance,
-                                () =>
-                                {
-                                    instance.GetType().GetProperty(propertyName).SetValue(instance, oldValue, null);
-
-                                },
-                                () => instance.GetType().GetProperty(propertyName).SetValue(instance, newValue, null),
-                                new ChangeKey<object, string>(instance, propertyName)
-                            );
+            var change = new PropertyChange(instance, propertyName, oldValue, newValue);
 
             return change;
         }
