@@ -51,9 +51,20 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Change.cs" />
-    <Compile Include="ChangeKey.cs" />
+    <Compile Include="ChangeKey_T2.cs" />
+    <Compile Include="ChangeKey_T3.cs" />
     <Compile Include="ChangeSet.cs" />
+    <Compile Include="Changes\Change.cs" />
+    <Compile Include="Changes\CollectionReplaceChange.cs" />
+    <Compile Include="Changes\DelegateChange.cs" />
+    <Compile Include="Changes\CollectionAddRemoveChangeBase.cs" />
+    <Compile Include="Changes\CollectionAddChange.cs" />
+    <Compile Include="Changes\CollectionRemoveChange.cs" />
+    <Compile Include="Changes\CollectionMoveChange.cs" />
+    <Compile Include="Changes\CollectionChange.cs" />
+    <Compile Include="Changes\PropertyChange.cs" />
+    <Compile Include="ChangeFactory.cs" />
+    <Compile Include="ISupportsUndoNotification.cs" />
     <Compile Include="DefaultChangeFactory.cs" />
     <Compile Include="ISupportsUndo.cs" />
     <Compile Include="IUndoMetadata.cs" />
