@@ -710,6 +710,7 @@ namespace MonitoredUndoTests
             Assert.AreEqual(0, Document1.Bs.Count);
         }
 
+#if !SILVERLIGHT
         [TestMethod]
         public void DefaultChangeFactory_Supports_Collection_Move()
         {
@@ -729,6 +730,7 @@ namespace MonitoredUndoTests
             Assert.AreEqual("Document1.ChildB[1]", Document1.Bs[1].Name);
             Assert.AreEqual("Document1.ChildB[2]", Document1.Bs[2].Name);
         }
+#endif
 
         [TestMethod]
         public void DefaultChangeFactory_Supports_Collection_Replace()

@@ -9,17 +9,13 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MonitoredUndo</RootNamespace>
-    <AssemblyName>MonitoredUndo35</AssemblyName>
+    <AssemblyName>MonitoredUndoPortable</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -53,56 +49,20 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\MonitoredUndo\AssemblyVersion.cs">
-      <Link>AssemblyVersion.cs</Link>
+    <Compile Include="..\..\..\MonitoredUndo\Change.cs">
+      <Link>Change.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\ChangeFactory.cs">
-      <Link>ChangeFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\ChangeKey_T2.cs">
-      <Link>ChangeKey_T2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\ChangeKey_T3.cs">
-      <Link>ChangeKey_T3.cs</Link>
+    <Compile Include="..\..\..\MonitoredUndo\ChangeKey.cs">
+      <Link>ChangeKey.cs</Link>
     </Compile>
     <Compile Include="..\..\..\MonitoredUndo\ChangeSet.cs">
       <Link>ChangeSet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\Changes\Change.cs">
-      <Link>Changes\Change.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\Changes\CollectionAddChange.cs">
-      <Link>Changes\CollectionAddChange.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\Changes\CollectionAddRemoveChangeBase.cs">
-      <Link>Changes\CollectionAddRemoveChangeBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\Changes\CollectionChange.cs">
-      <Link>Changes\CollectionChange.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\Changes\CollectionMoveChange.cs">
-      <Link>Changes\CollectionMoveChange.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\Changes\CollectionRemoveChange.cs">
-      <Link>Changes\CollectionRemoveChange.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\Changes\CollectionReplaceChange.cs">
-      <Link>Changes\CollectionReplaceChange.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\Changes\DelegateChange.cs">
-      <Link>Changes\DelegateChange.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\Changes\PropertyChange.cs">
-      <Link>Changes\PropertyChange.cs</Link>
     </Compile>
     <Compile Include="..\..\..\MonitoredUndo\DefaultChangeFactory.cs">
       <Link>DefaultChangeFactory.cs</Link>
     </Compile>
     <Compile Include="..\..\..\MonitoredUndo\ISupportsUndo.cs">
       <Link>ISupportsUndo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\MonitoredUndo\ISupportsUndoNotification.cs">
-      <Link>ISupportsUndoNotification.cs</Link>
     </Compile>
     <Compile Include="..\..\..\MonitoredUndo\IUndoMetadata.cs">
       <Link>IUndoMetadata.cs</Link>
@@ -118,7 +78,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

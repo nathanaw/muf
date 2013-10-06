@@ -6,22 +6,18 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{876B42D2-67E8-45B5-886C-9AB8C75E76C4}</ProjectGuid>
+    <ProjectGuid>{B679C624-1ABB-4917-98F3-45227137B653}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MonitoredUndoTests</RootNamespace>
-    <AssemblyName>MonitoredUndoTests</AssemblyName>
+    <AssemblyName>MonitoredUndoTestsPortable</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,16 +50,24 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChildA.cs" />
-    <Compile Include="ChildB.cs" />
+    <Compile Include="..\..\..\MonitoredUndoTests\ChildA.cs">
+      <Link>ChildA.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\MonitoredUndoTests\ChildB.cs">
+      <Link>ChildB.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\MonitoredUndoTests\RootDocument.cs">
+      <Link>RootDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\MonitoredUndoTests\UndoTests.cs">
+      <Link>UndoTests.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RootDocument.cs" />
-    <Compile Include="UndoTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonitoredUndo\MonitoredUndo.csproj">
-      <Project>{FF127A9A-BACB-4BC3-99DE-9F80275A06D4}</Project>
-      <Name>MonitoredUndo</Name>
+    <ProjectReference Include="..\MonitoredUndoPortable\MonitoredUndoPortable.csproj">
+      <Project>{CB193269-F9C2-42C4-B16E-9CA9C8A9C2FC}</Project>
+      <Name>MonitoredUndoPortable</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
