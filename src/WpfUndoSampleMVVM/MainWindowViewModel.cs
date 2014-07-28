@@ -122,7 +122,7 @@ namespace WpfUndoSampleMVVM
                 // Store this change in the Undo system.
                 // This uses the "DefaultChangeFactory" to construct the change, but you can 
                 // store changes any way you like.
-                DefaultChangeFactory.OnChanging(this, "FirstName", _FirstName, value, "First Name Changed");
+                DefaultChangeFactory.Current.OnChanging(this, "FirstName", _FirstName, value, "First Name Changed");
 
                 _FirstName = value;
                 OnPropertyChanged("FirstName"); // Tells the UI that this property has changed.
@@ -142,7 +142,7 @@ namespace WpfUndoSampleMVVM
                 // Store this change in the Undo system.
                 // This uses the "DefaultChangeFactory" to construct the change, but you can 
                 // store changes any way you like.
-                DefaultChangeFactory.OnChanging(this, "LastName", _LastName, value, "Last Name Changed");
+                DefaultChangeFactory.Current.OnChanging(this, "LastName", _LastName, value, "Last Name Changed");
 
                 _LastName = value;
                 OnPropertyChanged("LastName");  // Tells the UI that this property changed.
@@ -171,7 +171,7 @@ namespace WpfUndoSampleMVVM
                 // Store this change in the Undo system.
                 // This uses the "DefaultChangeFactory" to construct the change, but you can 
                 // store changes any way you like.
-                DefaultChangeFactory.OnChanging(this, "Age", _Age, value, "Age Changed");
+                DefaultChangeFactory.Current.OnChanging(this, "Age", _Age, value, "Age Changed");
 
                 _Age = value;
                 OnPropertyChanged("Age");
