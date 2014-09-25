@@ -18,6 +18,7 @@ namespace MonitoredUndoTests
         public RootDocument()
         {
             _Bs = new ObservableCollection<ChildB>();
+            _KeyValuePairs = new Dictionary<int, ChildA>();
             _Bs.CollectionChanged += Bs_CollectionChanged;
         }
 
@@ -36,7 +37,7 @@ namespace MonitoredUndoTests
                 value.Root = this;
 
                 // This line will log the property change with the undo framework.
-                DefaultChangeFactory.OnChanging(this, "A", _A, value);
+                DefaultChangeFactory.Current.OnChanging(this, "A", _A, value);
 
                 _A = value;
                 OnPropertyChanged("A");
@@ -44,9 +45,20 @@ namespace MonitoredUndoTests
         }
 
         private ObservableCollection<ChildB> _Bs;
+        
         public ObservableCollection<ChildB> Bs
         {
             get { return _Bs; }
+        }
+
+        public Dictionary<int, ChildA> _KeyValuePairs;
+
+        public Dictionary<int, ChildA> KeyValuePairs
+        {
+            get
+            {
+                return _KeyValuePairs;
+            }
         }
 
         #endregion
@@ -62,7 +74,7 @@ namespace MonitoredUndoTests
                     item.Root = null;
 
             // This line will log the collection change with the undo framework.
-            DefaultChangeFactory.OnCollectionChanged(this, "Bs", this.Bs, e, "Collection of B's Changed");
+            DefaultChangeFactory.Current.OnCollectionChanged(this, "Bs", this.Bs, e, "Collection of B's Changed");
         }
 
         #endregion

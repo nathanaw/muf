@@ -42,7 +42,7 @@ namespace MonitoredUndoTests
                     return;
 
                 // This line will log the property change with the undo framework.
-                DefaultChangeFactory.OnChanging(this, "Name", _Name, value, "Name changed.");
+                DefaultChangeFactory.Current.OnChanging(this, "Name", _Name, value, "Name changed.");
 
                 _Name = value;
                 OnPropertyChanged("Name");
@@ -60,7 +60,7 @@ namespace MonitoredUndoTests
                     return;
 
                 // This line will log the property change with the undo framework.
-                DefaultChangeFactory.OnChanging(this, "Root", _Root, value);
+                DefaultChangeFactory.Current.OnChanging(this, "Root", _Root, value);
 
                 _Root = value;
                 OnPropertyChanged("Root");
@@ -82,7 +82,7 @@ namespace MonitoredUndoTests
                     return;
 
                 // This line will log the property change with the undo framework.
-                DefaultChangeFactory.OnChanging(this, "UndoableSometimes", _UndoableSometimes, value);
+                DefaultChangeFactory.Current.OnChanging(this, "UndoableSometimes", _UndoableSometimes, value);
 
                 _UndoableSometimes = value;
                 OnPropertyChanged("UndoableSometimes");

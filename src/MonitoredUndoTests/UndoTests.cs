@@ -28,6 +28,10 @@ namespace MonitoredUndoTests
             Document1.Bs.Add(new ChildB() { Name = "Document1.ChildB[1]" });
             Document1.Bs.Add(new ChildB() { Name = "Document1.ChildB[2]" });
 
+            Document1.KeyValuePairs[0] = new ChildA() { Name = "Document1.ChildA.0" };
+            Document1.KeyValuePairs[1] = new ChildA() { Name = "Document1.ChildA.1" };
+            Document1.KeyValuePairs[2] = new ChildA() { Name = "Document1.ChildA.2" };
+
             Assert.IsNotNull(Document1.A.Root);
             Assert.AreSame(Document1, Document1.A.Root);
             Assert.AreSame(Document1, Document1.Bs[0].Root);
@@ -329,6 +333,7 @@ namespace MonitoredUndoTests
             Assert.AreEqual(0, root.UndoStack.Count());
             Assert.AreEqual(2, root.RedoStack.Count());
         }
+
         [TestMethod]
         public void UndoRoot_Can_Redo_Multiple_ChangeSets()
         {
@@ -386,6 +391,7 @@ namespace MonitoredUndoTests
             Assert.AreEqual(1, root.UndoStack.Count());
             Assert.AreEqual(0, root.RedoStack.Count());
         }
+
         [TestMethod]
         public void UndoRoot_Supports_Nested_Batches_Of_Changes()
         {
@@ -428,47 +434,7 @@ namespace MonitoredUndoTests
             Assert.AreEqual(1, root.UndoStack.Count());
             Assert.AreEqual(0, root.RedoStack.Count());
         }
-        //[TestMethod]
-        //public void UndoRoot_Ignores_New_ChangeSets_When_Undoing_ChangeSets()
-        //{
-        //}
-        //[TestMethod]
-        //public void UndoRoot_Ignores_New_ChangeSets_When_Redoing_ChangeSets()
-        //{
-        //}
 
-        //[TestMethod]
-        //public void UndoRoot_Throws_InvalidOperationException_If_Undo_Attempted_When_In_Batch()
-        //{
-        //}
-        //[TestMethod]
-        //public void UndoRoot_Throws_InvalidOperationException_If_Redo_Attempted_When_In_Batch()
-        //{
-        //}
-        //[TestMethod]
-        //public void UndoRoot_Throws_InvalidOperationException_If_Undo_Attempted_Where_Specified_ChangeSet_Not_In_Stack()
-        //{
-        //}
-        //[TestMethod]
-        //public void UndoRoot_Throws_InvalidOperationException_If_Redo_Attempted_Where_Specified_ChangeSet_Not_In_Stack()
-        //{
-        //}
-
-
-
-
-        //[TestMethod]
-        //public void ChangeSet_Has_Reference_To_UndoRoot()
-        //{
-        //}
-        //[TestMethod]
-        //public void ChangeSet_Has_Property_Named_Undone_Indicating_Whether_The_ChangeSet_Has_Been_Undone()
-        //{
-        //}
-        //[TestMethod]
-        //public void ChangeSet_Can_Add_Change()
-        //{
-        //}
         [TestMethod]
         public void ChangeSet_Supports_Consolidating_Changes_For_The_Same_Change_Key()
         {
@@ -511,55 +477,7 @@ namespace MonitoredUndoTests
             Assert.AreEqual(1, root.UndoStack.Count());
             Assert.AreEqual(0, root.RedoStack.Count());
         }
-        //[TestMethod]
-        //public void ChangeSet_Can_Undo_Its_Changes()
-        //{
-        //}
-        //[TestMethod]
-        //public void ChangeSet_Can_Redo_Its_Changes()
-        //{
-        //}
 
-        //[TestMethod]
-        //public void Change_Has_Reference_To_Target_Instance()
-        //{
-        //}
-        //[TestMethod]
-        //public void Change_Has_Action_That_Performs_Undo_Steps()
-        //{
-        //}
-        //[TestMethod]
-        //public void Change_Has_Action_That_Performs_Redo_Steps()
-        //{
-        //}
-        //[TestMethod]
-        //public void Change_Has_ChangeKey_That_Uniquely_Identifies_The_Undo_Action()
-        //{
-        //}
-        //[TestMethod]
-        //public void Change_Can_Merge_With_A_Change_For_The_Same_Key()
-        //{
-        //}
-        //[TestMethod]
-        //public void Change_Calls_ISupportUndoNotification_UndoHappened_Method_After_Undo()
-        //{
-        //}
-        //[TestMethod]
-        //public void Change_Calls_ISupportUndoNotification_RedoHappened_Method_After_Redo()
-        //{
-        //}
-
-
-
-
-        //[TestMethod]
-        //public void DefaultChangeFactory_Supports_Scalar_Properties()
-        //{
-        //}
-        //[TestMethod]
-        //public void DefaultChangeFactory_Supports_Reference_Type_Properties()
-        //{
-        //}
         [TestMethod]
         public void DefaultChangeFactory_Supports_Collection_Adds()
         {
@@ -685,7 +603,7 @@ namespace MonitoredUndoTests
         {
             try
             {
-                DefaultChangeFactory.ThrowExceptionOnCollectionResets = true;
+                DefaultChangeFactory.Current.ThrowExceptionOnCollectionResets = true;
                 Document1.Bs.Clear();
                 Assert.Fail("Should have throw NotSupportedException");
             }
@@ -699,7 +617,7 @@ namespace MonitoredUndoTests
             Document1.Bs.Add(new ChildB() { Name = "New B2" });
             UndoService.Current[Document1].Clear();
             
-            DefaultChangeFactory.ThrowExceptionOnCollectionResets = false;
+            DefaultChangeFactory.Current.ThrowExceptionOnCollectionResets = false;
             Document1.Bs.Clear();
 
             // Nothing added to undo stack.
@@ -708,6 +626,63 @@ namespace MonitoredUndoTests
 
             UndoService.Current[Document1].Undo();
             Assert.AreEqual(0, Document1.Bs.Count);
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Dictionary_Adds()
+        {
+            Assert.AreEqual("Document1.ChildA.0", Document1.KeyValuePairs[0].Name);
+            Assert.AreEqual("Document1.ChildA.1", Document1.KeyValuePairs[1].Name);
+            Assert.AreEqual("Document1.ChildA.2", Document1.KeyValuePairs[2].Name);
+
+            Document1.KeyValuePairs[3] = new ChildA() { Name = "Document1.ChildA.3" };
+
+            Assert.AreEqual(4, Document1.KeyValuePairs.Count);
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual(3, Document1.KeyValuePairs.Count);
+            Assert.AreEqual("Document1.ChildA.0", Document1.KeyValuePairs[0].Name);
+            Assert.AreEqual("Document1.ChildA.1", Document1.KeyValuePairs[1].Name);
+            Assert.AreEqual("Document1.ChildA.2", Document1.KeyValuePairs[2].Name);
+
+            UndoService.Current[Document1].Redo();
+
+            Assert.AreEqual(4, Document1.KeyValuePairs.Count);
+            Assert.AreEqual("Document1.ChildA.0", Document1.KeyValuePairs[0].Name);
+            Assert.AreEqual("Document1.ChildA.1", Document1.KeyValuePairs[1].Name);
+            Assert.AreEqual("Document1.ChildA.2", Document1.KeyValuePairs[2].Name);
+            Assert.AreEqual("Document1.ChildB.3", Document1.KeyValuePairs[3].Name);
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Dictionary_Removes()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Dictionary_Replace()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Dictionary_Replace_Value()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Dictionary_MultipleRemoves()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void DefaultChangeFactory_Supports_Dictionary_MultipleAdds()
+        {
+            throw new NotImplementedException();
         }
 
 #if !SILVERLIGHT
