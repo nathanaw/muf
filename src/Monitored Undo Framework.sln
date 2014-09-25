@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoredUndo", "MonitoredUndo\MonitoredUndo.csproj", "{FF127A9A-BACB-4BC3-99DE-9F80275A06D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoredUndoTests", "MonitoredUndoTests\MonitoredUndoTests.csproj", "{876B42D2-67E8-45B5-886C-9AB8C75E76C4}"
