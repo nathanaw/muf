@@ -652,13 +652,32 @@ namespace MonitoredUndoTests
             Assert.AreEqual("Document1.ChildA.0", Document1.KeyValuePairs[0].Name);
             Assert.AreEqual("Document1.ChildA.1", Document1.KeyValuePairs[1].Name);
             Assert.AreEqual("Document1.ChildA.2", Document1.KeyValuePairs[2].Name);
-            Assert.AreEqual("Document1.ChildB.3", Document1.KeyValuePairs[3].Name);
+            Assert.AreEqual("Document1.ChildA.3", Document1.KeyValuePairs[3].Name);
         }
 
         [TestMethod]
         public void DefaultChangeFactory_Supports_Dictionary_Removes()
         {
-            throw new NotImplementedException();
+            Assert.AreEqual("Document1.ChildA.0", Document1.KeyValuePairs[0].Name);
+            Assert.AreEqual("Document1.ChildA.1", Document1.KeyValuePairs[1].Name);
+            Assert.AreEqual("Document1.ChildA.2", Document1.KeyValuePairs[2].Name);
+
+            Document1.KeyValuePairs.Remove(1);
+
+            Assert.AreEqual(2, Document1.KeyValuePairs.Count);
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual(3, Document1.KeyValuePairs.Count);
+            Assert.AreEqual("Document1.ChildA.0", Document1.KeyValuePairs[0].Name);
+            Assert.AreEqual("Document1.ChildA.1", Document1.KeyValuePairs[1].Name);
+            Assert.AreEqual("Document1.ChildA.2", Document1.KeyValuePairs[2].Name);
+
+            UndoService.Current[Document1].Redo();
+
+            Assert.AreEqual(2, Document1.KeyValuePairs.Count);
+            Assert.AreEqual("Document1.ChildA.0", Document1.KeyValuePairs[0].Name);
+            Assert.AreEqual("Document1.ChildA.2", Document1.KeyValuePairs[2].Name);
         }
 
         [TestMethod]

@@ -67,8 +67,12 @@
     <Compile Include="Changes\CollectionRemoveChange.cs" />
     <Compile Include="Changes\CollectionMoveChange.cs" />
     <Compile Include="Changes\CollectionChange.cs" />
+    <Compile Include="Changes\DictionaryAddRemoveChangeBase.cs" />
+    <Compile Include="Changes\DictionaryChange.cs" />
+    <Compile Include="Changes\DictionaryRemoveChange.cs" />
     <Compile Include="Changes\PropertyChange.cs" />
     <Compile Include="ChangeFactory.cs" />
+    <Compile Include="Changes\DictionaryAddChange.cs" />
     <Compile Include="ISupportsUndoNotification.cs" />
     <Compile Include="DefaultChangeFactory.cs" />
     <Compile Include="ISupportsUndo.cs" />

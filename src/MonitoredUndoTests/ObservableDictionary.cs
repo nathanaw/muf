@@ -16,7 +16,7 @@ namespace MonitoredUndoTests
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INotifyCollectionChanged, INotifyPropertyChanged
+    public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IDictionary, INotifyCollectionChanged, INotifyPropertyChanged
     {
         private const string CountString = "Count";
         private const string IndexerName = "Item[]";
@@ -73,6 +73,11 @@ namespace MonitoredUndoTests
             get { return Dictionary.Keys; }
         }
 
+        ICollection IDictionary.Values
+        {
+            get { return (ICollection) Dictionary.Values; }
+        }
+
         public bool Remove(TKey key)
         {
             if (key == null) throw new ArgumentNullException("key");
@@ -81,8 +86,7 @@ namespace MonitoredUndoTests
             Dictionary.TryGetValue(key, out value);
             var removed = Dictionary.Remove(key);
             if (removed)
-                //OnCollectionChanged(NotifyCollectionChangedAction.Remove, new KeyValuePair<TKey, TValue>(key, value));
-                OnCollectionChanged();
+                OnCollectionChanged(NotifyCollectionChangedAction.Remove, new KeyValuePair<TKey, TValue>(key, value));
 
             return removed;
         }
@@ -93,6 +97,11 @@ namespace MonitoredUndoTests
             return Dictionary.TryGetValue(key, out value);
         }
 
+
+        ICollection IDictionary.Keys
+        {
+            get { return (ICollection) Dictionary.Keys; }
+        }
 
         public ICollection<TValue> Values
         {
@@ -125,6 +134,16 @@ namespace MonitoredUndoTests
         }
 
 
+        public bool Contains(object key)
+        {
+            return Dictionary.ContainsKey((TKey) key);
+        }
+
+        public void Add(object key, object value)
+        {
+            Insert((TKey) key, (TValue) value, true);
+        }
+
         public void Clear()
         {
             if (Dictionary.Count > 0)
@@ -132,6 +151,22 @@ namespace MonitoredUndoTests
                 Dictionary.Clear();
                 OnCollectionChanged();
             }
+        }
+
+        IDictionaryEnumerator IDictionary.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(object key)
+        {
+            bool remove = Dictionary.Remove((TKey) key);
+        }
+
+        object IDictionary.this[object key]
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
         }
 
 
@@ -147,16 +182,26 @@ namespace MonitoredUndoTests
         }
 
 
+        public void CopyTo(Array array, int index)
+        {
+            throw new NotImplementedException();
+        }
+
         public int Count
         {
             get { return Dictionary.Count; }
         }
+
+        public object SyncRoot { get; private set; }
+        public bool IsSynchronized { get; private set; }
 
 
         public bool IsReadOnly
         {
             get { return Dictionary.IsReadOnly; }
         }
+
+        public bool IsFixedSize { get; private set; }
 
 
         public bool Remove(KeyValuePair<TKey, TValue> item)

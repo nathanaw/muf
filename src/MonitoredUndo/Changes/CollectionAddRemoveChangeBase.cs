@@ -13,9 +13,6 @@ namespace MonitoredUndo
 
         #region Member Variables
 
-        private readonly object _Element;
-        private readonly int _Index;
-
         protected object _RedoElement;
         protected int _RedoIndex;
 
@@ -28,8 +25,8 @@ namespace MonitoredUndo
             : base(target, propertyName, collection,
                    new ChangeKey<object, string, object>(target, propertyName, element))
         {
-            this._Element = element;
-            this._Index = index;
+            this.Element = element;
+            this.Index = index;
 
             this._RedoElement = element;
             this._RedoIndex = index;
@@ -39,15 +36,9 @@ namespace MonitoredUndo
 
         #region Public Properties
 
-        public object Element
-        {
-            get { return _Element; }
-        }
+        public object Element { get; private set; }
 
-        public int Index
-        {
-            get { return _Index; }
-        }
+        public int Index { get; private set; }
 
         #endregion
 
@@ -68,22 +59,12 @@ namespace MonitoredUndo
 
         #region Internal
 
-        protected override void PerformUndo()
-        {
-            Collection.Remove(Element);
-        }
-
-        protected override void PerformRedo()
-        {
-            Collection.Insert(_RedoIndex, _RedoElement);
-        }
-
         protected string DebuggerDisplay
         {
             get
             {
                 return string.Format(
-                    "{4}(Property={0}, Target={{{1}}}, Index={2}, Element={{{3}}})",
+                    "{4}(Property={0}, Target={{{1}}}, Value={2}, Key={{{3}}})",
                     PropertyName, Target, Index, Element, GetType().Name);
             }
         }

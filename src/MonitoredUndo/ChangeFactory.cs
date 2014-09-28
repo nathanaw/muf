@@ -7,6 +7,7 @@ using System.Collections;
 using System.Globalization;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using MonitoredUndo.Changes;
 
 namespace MonitoredUndo
 {
@@ -103,9 +104,20 @@ namespace MonitoredUndo
                 case NotifyCollectionChangedAction.Add:
                     foreach (var item in e.NewItems)
                     {
-                        var change = new CollectionAddChange(instance, propertyName, (IList) collection,
-                                                             e.NewStartingIndex, item);
-
+                        Change change = null; 
+                        if (collection as IList != null)
+                        {
+                            change = new CollectionAddChange(instance, propertyName, (IList)collection,
+                            e.NewStartingIndex, item);
+                        }
+                        else if (collection as IDictionary != null)
+                        {
+                            // item is a key value pair - get key and value to be recorded in dictionary change
+                            var keyProperty = item.GetType().GetProperty("Key");
+                            var valueProperty = item.GetType().GetProperty("Value");
+                            change = new DictionaryAddChange(instance, propertyName, (IDictionary)collection,
+                                                                 keyProperty.GetValue(item, null), valueProperty.GetValue(item, null));                            
+                        }
                         ret.Add(change);
                     }
 
@@ -114,9 +126,20 @@ namespace MonitoredUndo
                 case NotifyCollectionChangedAction.Remove:
                     foreach (var item in e.OldItems)
                     {
-                        var change = new CollectionRemoveChange(instance, propertyName, (IList) collection,
-                                                                e.OldStartingIndex, item);
-
+                        Change change = null;
+                        if (collection as IList != null)
+                        {
+                            change = new CollectionRemoveChange(instance, propertyName, (IList)collection,
+                                                                    e.OldStartingIndex, item);
+                        }
+                        else if (collection as IDictionary != null)
+                        {
+                            // item is a key value pair - get key and value to be recorded in dictionary change
+                            var keyProperty = item.GetType().GetProperty("Key");
+                            var valueProperty = item.GetType().GetProperty("Value");
+                            change = new DictionaryRemoveChange(instance, propertyName, (IDictionary)collection,
+                                                                 keyProperty.GetValue(item, null), valueProperty.GetValue(item, null));
+                        }
                         ret.Add(change);
                     }
 
@@ -208,7 +231,4 @@ namespace MonitoredUndo
             }
         }
     }
-
-
-
 }

@@ -91,7 +91,7 @@ namespace MonitoredUndo
             get
             {
                 return string.Format(
-                    "CollectionReplaceChange(Property={0}, Target={{{1}}}, Index={2}, NewItem={{{3}}}, OldItem={{{4}}})",
+                    "CollectionReplaceChange(Property={0}, Target={{{1}}}, Value={2}, NewItem={{{3}}}, OldItem={{{4}}})",
                     PropertyName, Target, Index, NewItem, OldItem);
             }
         }
