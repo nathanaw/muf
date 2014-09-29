@@ -70,6 +70,7 @@
     <Compile Include="Changes\DictionaryAddRemoveChangeBase.cs" />
     <Compile Include="Changes\DictionaryChange.cs" />
     <Compile Include="Changes\DictionaryRemoveChange.cs" />
+    <Compile Include="Changes\DictionaryReplaceChange.cs" />
     <Compile Include="Changes\PropertyChange.cs" />
     <Compile Include="ChangeFactory.cs" />
     <Compile Include="Changes\DictionaryAddChange.cs" />

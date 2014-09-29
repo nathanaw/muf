@@ -154,10 +154,26 @@ namespace MonitoredUndo
                     break;
 #endif
                 case NotifyCollectionChangedAction.Replace:
-                    // FIXME handle multi-item replace event
-                    var replaceChange = new CollectionReplaceChange(instance, propertyName, (IList) collection,
-                                                                    e.NewStartingIndex, e.OldItems[0], e.NewItems[0]);
-                    ret.Add(replaceChange);
+                    for (int i = 0; i < e.OldItems.Count; i++)
+                    {
+                        Change change = null;
+                        
+                        if (collection as IList != null)
+                        {
+                            change = new CollectionReplaceChange(instance, propertyName, (IList)collection,
+                                                                            e.NewStartingIndex, e.OldItems[i], e.NewItems[i]);
+                        }
+                        else if (collection as IDictionary != null)
+                        {
+                            // item is a key value pair - get key and value to be recorded in dictionary change
+                            var keyProperty = e.OldItems[i].GetType().GetProperty("Key");
+                            var oldValueProperty = e.OldItems[i].GetType().GetProperty("Value");
+                            var newValueProperty = e.OldItems[i].GetType().GetProperty("Value");
+                            change = new DictionaryReplaceChange(
+                                instance, propertyName, (IDictionary)collection, keyProperty.GetValue(e.OldItems[i], null), oldValueProperty.GetValue(e.OldItems[i], null), newValueProperty.GetValue(e.NewItems[i], null));
+                        }
+                        ret.Add(change);
+                    }
                     break;
 
                 case NotifyCollectionChangedAction.Reset:
@@ -165,21 +181,6 @@ namespace MonitoredUndo
                         throw new NotSupportedException("Undoing collection resets is not supported via the CollectionChanged event. The collection is already null, so the Undo system has no way to capture the set of elements that were previously in the collection.");
                     else
                         break;
-
-                    //IList collectionClone = collection.GetType().GetConstructor(new Type[] { collection.GetType() }).Invoke(new object[] { collection }) as IList;
-
-                    //var resetChange = new DelegateChange(
-                    //                        instance,
-                    //                        () =>
-                    //                        {
-                    //                            for (int i = 0; i < collectionClone.Count; i++) //for instead foreach to preserve the order
-                    //                                ((IList)collection).Add(collectionClone[i]);
-                    //                        },
-                    //                        () => collection.GetType().GetMethod("Clear").Invoke(collection, null),
-                    //                        new ChangeKey<object, string, object>(instance, propertyName, collectionClone)
-                    //                    );
-                    //ret.Add(resetChange);
-                    //break;
 
                 default:
                     throw new NotSupportedException();

@@ -683,13 +683,27 @@ namespace MonitoredUndoTests
         [TestMethod]
         public void DefaultChangeFactory_Supports_Dictionary_Replace()
         {
-            throw new NotImplementedException();
-        }
+            Assert.AreEqual("Document1.ChildA.0", Document1.KeyValuePairs[0].Name);
+            Assert.AreEqual("Document1.ChildA.1", Document1.KeyValuePairs[1].Name);
+            Assert.AreEqual("Document1.ChildA.2", Document1.KeyValuePairs[2].Name);
 
-        [TestMethod]
-        public void DefaultChangeFactory_Supports_Dictionary_Replace_Value()
-        {
-            throw new NotImplementedException();
+            Document1.KeyValuePairs[2] = new ChildA() { Name = "Document1.ChildA.2.A" };
+
+            Assert.AreEqual(3, Document1.KeyValuePairs.Count);
+
+            UndoService.Current[Document1].Undo();
+
+            Assert.AreEqual(3, Document1.KeyValuePairs.Count);
+            Assert.AreEqual("Document1.ChildA.0", Document1.KeyValuePairs[0].Name);
+            Assert.AreEqual("Document1.ChildA.1", Document1.KeyValuePairs[1].Name);
+            Assert.AreEqual("Document1.ChildA.2", Document1.KeyValuePairs[2].Name);
+
+            UndoService.Current[Document1].Redo();
+
+            Assert.AreEqual(3, Document1.KeyValuePairs.Count);
+            Assert.AreEqual("Document1.ChildA.0", Document1.KeyValuePairs[0].Name);
+            Assert.AreEqual("Document1.ChildA.1", Document1.KeyValuePairs[1].Name);
+            Assert.AreEqual("Document1.ChildA.2.A", Document1.KeyValuePairs[2].Name);
         }
 
         [TestMethod]

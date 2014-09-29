@@ -165,8 +165,14 @@ namespace MonitoredUndoTests
 
         object IDictionary.this[object key]
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get
+            {
+                return Dictionary[(TKey) key];
+            }
+            set
+            {
+                Insert((TKey) key, (TValue) value, false);
+            }
         }
 
 
