@@ -1,0 +1,200 @@
+<div class="wikidoc">
+<p><strong>Monitored Undo Framework</strong><br>
+Monitored Undo is an Undo / Redo framework that makes it simple for .NET developers to add Undo capabilities to an application. The framework &quot;monitors&quot; changes to the model, keeps a history of undo / redo operations, and assists with applying an undo back
+ to the model.</p>
+<p><strong>Quick Start...</strong><br>
+To get a quick idea of how it works, check out the <a title="Unit Tests" href="SourceControl/changeset/view/124#13930">
+unit tests</a> and the <a href="SourceControl/changeset/view/124#13937">sample model classes</a>.</p>
+<p><strong>Reference Application...</strong><br>
+For a more complete example application, please check out my Photo Tagger app. I created this for a .NET Special Interest Group presentation. It covers my &quot;WPF Tales from the Trenches&quot;, including Undo. You can find the
+<a title="Photo Tagger Reference App" href="http://blog.alner.net/archive/2010/10/13/wpf_ef_4_sig_presentation_2010.aspx">
+Photo Tagger reference app</a> on my <a title="Nathan's Blog" href="http://blog.alner.net">
+blog</a>.</p>
+<p><strong>Now on NuGet...</strong><br>
+MUF is available on NuGet. You can view details on the <a href="http://nuget.org/List/Packages/MUF">
+NuGet Gallery</a> or search for it in the Add Library Reference... dialog via Visual Studio. For you command line types, it's on NuGet as &quot;MUF&quot;.&nbsp; PM&gt; Install-Package MUF</p>
+<p>&nbsp;</p>
+<hr>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><em><span style="font-size:14pt">Design</span></em></p>
+<p><strong>Design Goals</strong></p>
+<p>The implementation has the following design attributes:</p>
+<ol>
+<li>Flexible design... can be used with a variety of applications. </li><li>Simple usage patterns. </li><li>A &ldquo;change monitoring&rdquo; approach, rather than a &ldquo;command model&rdquo; approach.
+</li></ol>
+<p>&nbsp;</p>
+<p><strong>Change Monitoring vs. Command Model</strong></p>
+<p>&ldquo;Change Monitoring&rdquo; is an approach that captures the changes that result from a given action. This is kind of like putting a net under the tree, shaking it, and catching what falls out. The benefit to this approach is simplicity. It requires
+ relatively straight forward changes to the codebase, minimal up-front design impact, and robust change handling.</p>
+<p>The &ldquo;Command Model&rdquo; is the more traditional model for undo, which prescribes that all actions against a system should be done via an object that knows how to perform the action. The assumption is that this object can also include a method that
+ would undo the action. While this is a better approach from a theoretical perspective, it requires up-front design consideration, and careful implementation. The challenges are:</p>
+<p style="text-indent:-0.25in">-<span style="font:7pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Creating command objects that fully understand the downstream consequences of an action, and how to undo them. In a &ldquo;reactive&rdquo; system, this can be challenging to implement since one action could result in a domino-effect of changes throughout
+ the system.</p>
+<p style="text-indent:-0.25in">-<span style="font:7pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>Using command objects for all changes to a system prevents usage of other patterns, like WPF&rsquo;s binding system for two-way bindings. A pure command based implementation would only be able to use one-way bindings, preferring to push updates through
+ a command rather than a binding.</p>
+<p>The above discussion provides the background for the decision to use &ldquo;change monitoring&rdquo; in this implementation.<em><span style="font-size:14pt">
+</span></em></p>
+<p>&nbsp;</p>
+<hr>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><em><span style="font-size:14pt">Classes</span></em></p>
+<p><strong>UndoService</strong></p>
+<p><span><span style="font-size:10pt">UndoService</span></span> is the top level of the undo / redo system. It contains one or more
+<span><span style="font-size:10pt">UndoRoot</span></span>s, accessible via the indexer on the
+<span><span style="font-size:10pt">UndoService</span></span>.</p>
+<p><span><span style="font-size:10pt">UndoService.Current</span></span> property will return the singleton instance of the
+<span><span style="font-size:10pt">UndoService</span></span>. Use this when interacting with the undo service.</p>
+<p><span><span style="font-size:10pt">UndoService.Current[modelRoot]</span></span> will return an instance of
+<span><span style="font-size:10pt">UndoRoot</span></span> for the specified <span>
+<span style="font-size:10pt">modelRoot</span></span>.</p>
+<p>&nbsp;</p>
+<p><strong>UndoRoot</strong></p>
+<p><span><span style="font-size:10pt">UndoRoot</span></span> collects changes related to a specific document or instance of a model. This allows an application to track multiple, distinct undo stacks. This class has most of the public API methods that you&rsquo;ll
+ use to undo, redo, and add changes.</p>
+<p>Contains FIFO stacks of <span><span style="font-size:10pt">ChangeSet</span></span>s for undo and redo actions. Includes the logic to manage the undo and redo stacks. For example, the redo stack is cleared whenever a new undo
+<span><span style="font-size:10pt">ChangeSet</span></span> is added.</p>
+<p><span><span style="font-size:10pt">UndoRoot.Undo()</span></span> will undo the last operation. (Overloads available)</p>
+<p><span><span style="font-size:10pt">UndoRoot.Redo()</span></span> will redo the last operation. (Overloads available)</p>
+<p><span><span style="font-size:10pt">UndoRoot.AddChange()</span></span> will add a new
+<span><span style="font-size:10pt">Change</span></span> to the system. <span><span style="font-size:10pt">ChangeSets</span></span> are automatically created as needed.</p>
+<p><span><span style="font-size:10pt">UndoRoot.Clear()</span></span> will clear the undo and redo stacks.</p>
+<p><strong>&nbsp;</strong></p>
+<p><strong>ChangeSet</strong></p>
+<p><span><span style="font-size:10pt">ChangeSet</span></span> has a collection of
+<span><span style="font-size:10pt">Change</span></span> instances. It represents a unit of undo or redo work.</p>
+<p><span><span style="font-size:11.5pt">&nbsp;</span></span></p>
+<p><span><span style="font-size:11.5pt">Change</span></span></p>
+<p>Change is an individual action to perform when undoing or redoing a <span><span style="font-size:10pt">ChangeSet</span></span>. The Change class contains
+<span><span style="font-size:10pt">Action()</span></span> delegates (or lambdas) that perform the undo and redo operations.</p>
+<p>&nbsp;</p>
+<p><strong>UndoBatch </strong></p>
+<p>Is a &quot;scope based&quot; helper that can group changes into a single <span><span style="font-size:10pt">ChangeSet</span></span>. It detects new
+<span><span style="font-size:10pt">Change</span></span>s that occur and automatically groups them into a single
+<span><span style="font-size:10pt">ChangeSet</span></span>.</p>
+<p><span><span style="font-size:10pt">UndoBatch</span></span> is designed similarly to the
+<span><span style="font-size:10pt">TransactionScope</span></span> class in the .NET framework. It is most useful via a
+<span><span style="font-size:10pt">using</span></span> block that contains a set of changes.
+<span><span style="font-size:10pt">UndoBatch</span></span> will start a new batch at the start of the
+<span><span style="font-size:10pt">using</span></span> block and then close that batch at the end of the
+<span><span style="font-size:10pt">using</span></span> statement, when the <span>
+<span style="font-size:10pt">Dispose</span></span> method is called.</p>
+<p><span><span style="font-size:10pt">UndoBatch</span></span> supports nested usage, but will only ever start a single
+<span><span style="font-size:10pt">ChangeSet</span></span>. This means that the top-most
+<span><span style="font-size:10pt">UndoBatch</span></span> controls the batching boundary.</p>
+<p><span><span style="font-size:11.5pt">&nbsp;</span></span></p>
+<p><span><span style="font-size:11.5pt">DefaultChangeFactory</span></span></p>
+<p><span><span style="font-size:10pt">DefaultChangeFactory</span></span> is a static utility class that helps populate the undo system with
+<span><span style="font-size:10pt">ChangeSet</span></span> and <span><span style="font-size:10pt">Change</span></span> instances. The default implementation uses reflection to access the properties of a class.</p>
+<p>If implemented, the DefaultChangeFactory will take advantage of the interfaces (mentioned below) to allow more control over the undo / redo process.</p>
+<p><em><span style="font-size:14pt">&nbsp;</span></em></p>
+<p><em><span style="font-size:14pt">Interfaces </span></em></p>
+<p>The following are used by the <span><span style="font-size:10pt">DefaultChangeFactory</span></span> and other change factories. The interfaces make it simple for these factories to create the undo / redo actions and provide the class a way to intercept or
+ influence this process.</p>
+<p><strong>ISupportsUndo</strong></p>
+<p>Should be implemented on classes that want to participate in undo / redo operations.</p>
+<p><span><span style="font-size:10pt">ISupportsUndo.GetUndoRoot()</span></span> should be implemented and return a reference to the &ldquo;model root&rdquo; or &ldquo;document root&rdquo; that represents the undo boundary.</p>
+<p>This is not required to use the undo system, but is required by the <span><span style="font-size:10pt">DefaultChangeFactory</span></span>.</p>
+<p><strong>ISupportsUndoNotification </strong></p>
+<p>An optional interface that helps classes react to undo and redo operations.</p>
+<p>This is not required to use the undo system, but is required by the <span><span style="font-size:10pt">DefaultChangeFactory</span></span>.</p>
+<p><strong>IUndoMetadata </strong></p>
+<p>Allows a class to influence whether a given property or collection change should be tracked for undo.</p>
+<p>This is not required to use the undo system, but is required by the <span><span style="font-size:10pt">DefaultChangeFactory</span></span>.</p>
+<p><em><span style="font-size:14pt">&nbsp;</span></em></p>
+<p><em><span style="font-size:14pt">&nbsp;</span></em></p>
+<p><em><span style="font-size:14pt">Class Diagram</span></em></p>
+<p><a href="http://download.codeplex.com/download?ProjectName=muf&DownloadId=155349"><img title="UndoClassDiagram" src="http://download.codeplex.com/download?ProjectName=muf&DownloadId=155350" border="0" alt="UndoClassDiagram" width="662" height="722" style="padding-left:0px; padding-right:0px; display:inline; padding-top:0px; border:0"></a></p>
+<p><em><span style="font-size:14pt">&nbsp; </span></em></p>
+<p><em>&nbsp;</em></p>
+<p><em></em></p>
+<hr>
+<p><em></em></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><em><span style="font-size:14pt">Notes and Common Issues</span></em></p>
+<p><strong>Step Zero&hellip; Review the Unit Tests!</strong></p>
+<p>The <span style="text-decoration:underline">unit tests</span> for the Undo system is a great place to start. It will show you the way that the classes are supposed to be used, and you can even step through them in debug to understand how things work.</p>
+<p><strong>&ldquo;Undo doesn&rsquo;t seem to work&hellip;&rdquo;</strong></p>
+<p>If you are hitting &ldquo;Undo&rdquo;, but your user interface isn&rsquo;t changing, then the problem might be with your
+<span><span style="font-size:10pt">INotifyPropertyChanged</span></span> (aka INPC) implementation. Often times, the Undo service is actually undoing the changes by updating the model and/or view models. However, if your UI is bound to a property that doesn&rsquo;t
+ raise the <span><span style="font-size:10pt">PropertyChanged</span></span> or <span>
+<span style="font-size:10pt">CollectionChanged</span></span> event when the underlying model changes, then the UI won&rsquo;t update.</p>
+<p>One way to check this is to undo some actions, save the model, and then re-open the model. If the values are undone, then there is an &ldquo;INotifyPropertyChanged&rdquo; gap between the UI&rsquo;s bound property and the underlying model.</p>
+<p><strong>&ldquo;I need to group a set of changes together&hellip;&rdquo;</strong></p>
+<p>In some cases, you want to click &ldquo;Undo&rdquo; and have it undo a set of changes, not just one change. To do this, you&rsquo;ll need to use the
+<span><span style="font-size:10pt">UndoBatch</span></span> class to group these changes.</p>
+<p>Example:</p>
+<p style="margin-bottom:0pt"><span style="font-family:consolas; font-size:10pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [<span style="color:#2b91af">TestMethod</span>]
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue">public</span>&nbsp;<span style="color:blue">void</span> UndoRoot_Supports_Starting_a_Batch_Of_Changes()
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue">
+var</span> orig = Document1.A.Name; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue">
+var</span> firstChange = <span style="color:#a31515">&quot;First Change&quot;</span>; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue">
+var</span> secondChange = <span style="color:#a31515">&quot;Second Change&quot;</span>; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue">
+var</span> root = <span style="color:#2b91af">UndoService</span>.Current[Document1];
+<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue">
+using</span> (<span style="color:blue">new</span>&nbsp;<span style="color:#2b91af">UndoBatch</span>(Document1,
+<span style="color:#a31515">&quot;Change Name&quot;</span>, <span style="color:blue">false</span>))
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Document1.A.Name = firstChange;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Document1.A.Name = secondChange;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } <br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#2b91af">
+Assert</span>.AreEqual(1, root.UndoStack.Count()); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#2b91af">
+Assert</span>.AreEqual(0, root.RedoStack.Count()); <br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; root.Undo(); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#2b91af">
+Assert</span>.AreEqual(orig, Document1.A.Name); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#2b91af">
+Assert</span>.AreEqual(0, root.UndoStack.Count()); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#2b91af">
+Assert</span>.AreEqual(1, root.RedoStack.Count()); <br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; root.Redo(); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#2b91af">
+Assert</span>.AreEqual(secondChange, Document1.A.Name); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#2b91af">
+Assert</span>.AreEqual(1, root.UndoStack.Count()); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#2b91af">
+Assert</span>.AreEqual(0, root.RedoStack.Count()); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</span></p>
+<p>&nbsp;</p>
+<p><strong>&ldquo;I&rsquo;m doing a mouse operation or a calculation that is changing the same field multiple times within the same undo batch. I only need the last value.&rdquo;</strong></p>
+<p>If you have a mouse based operation, then your model or view model might be changing repeatedly as the user drags the mouse around. This can result in one
+<span><span style="font-size:10pt">Change</span></span> for each discrete position of the mouse.</p>
+<p>Typically, the system and the undo service only need to remember the last value. Undoing the operation reverts to the original value before dragging the mouse. Redoing applies the value from when they stopped dragging the mouse. All intermediate values are
+ irrelevant.</p>
+<p>To handle this scenario, the top level <span><span style="font-size:10pt">UndoBatch</span></span> constructor takes the
+<span><span style="font-size:10pt">bool</span></span> <span><span style="font-size:10pt">consolidateChangesForSameInstance</span></span> parameter. This parameter will tell the undo system that it should only keep the last value for each changed property within
+ the batch.</p>
+<p><em><span style="text-decoration:underline">Note:</span> <br>
+This functionality takes a little more processing time, but reduces the memory used.</em></p>
+<p><em><span style="text-decoration:underline">Note:</span> <br>
+This functionality requires that the </em><span><em><span style="font-size:10pt">Change</span></em></span><em> instance have a reliable &ldquo;token&rdquo; to uniquely identify the property that it is for. The built-in
+</em><span><em><span style="font-size:10pt">DefaultChangeFactory</span></em></span><em> class handles this automatically, but if you are manually creating
+</em><span><em><span style="font-size:10pt">Change</span></em></span><em> instances, you&rsquo;ll need to ensure that you have a unique &ldquo;token&rdquo; for the property. A simple implementation is to use the
+</em><span><em><span style="font-size:10pt">Tuple&lt;&gt;</span></em></span><em> class with a sufficient number of parameters to uniquely identify the object instance, and the property on that instance. See the
+</em><span><em><span style="font-size:10pt">DefaultChangeFactory</span></em></span><em> for an example of this.</em></p>
+<p>&nbsp;</p>
+<p><em><span style="font-size:14pt">&nbsp;</span></em></p>
+<p><em><span style="font-style:normal; letter-spacing:0pt; color:windowtext; font-size:14pt; font-weight:normal">&nbsp;</span></em></p>
+</div><div class="ClearBoth"></div>
