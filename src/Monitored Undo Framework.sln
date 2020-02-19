@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoredUndo", "MonitoredUndo\MonitoredUndo.csproj", "{FF127A9A-BACB-4BC3-99DE-9F80275A06D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoredUndoTests", "MonitoredUndoTests\MonitoredUndoTests.csproj", "{876B42D2-67E8-45B5-886C-9AB8C75E76C4}"
@@ -24,10 +26,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6111F7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfUndoSampleMVVM", "WpfUndoSampleMVVM\WpfUndoSampleMVVM.csproj", "{86B5DDDF-EEE5-4265-BC5D-88EB558F12B4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonitoredUndoStd", "MonitoredUndoStd\MonitoredUndoStd.csproj", "{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfUndoSampleMVVM.Core", "WpfUndoSampleMVVM.Core\WpfUndoSampleMVVM.Core.csproj", "{0AFB4172-7839-419B-A434-E77E87071853}"
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = Monitored Undo Framework.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -77,8 +80,38 @@ Global
 		{86B5DDDF-EEE5-4265-BC5D-88EB558F12B4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{86B5DDDF-EEE5-4265-BC5D-88EB558F12B4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{86B5DDDF-EEE5-4265-BC5D-88EB558F12B4}.Release|x86.ActiveCfg = Release|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Debug|x86.Build.0 = Debug|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Release|x86.ActiveCfg = Release|Any CPU
+		{DAF63F42-8B1F-4FE4-A2BE-5B0BE046573D}.Release|x86.Build.0 = Release|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Debug|x86.Build.0 = Debug|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Release|x86.ActiveCfg = Release|Any CPU
+		{0AFB4172-7839-419B-A434-E77E87071853}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E2B57A17-7A82-4907-91F3-69A1CAF1EA7E}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Monitored Undo Framework.vsmdi
 	EndGlobalSection
 EndGlobal
