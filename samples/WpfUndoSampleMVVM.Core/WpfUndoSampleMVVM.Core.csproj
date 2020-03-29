@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+
+    <IsPackable>false</IsPackable>
+
+    <RootNamespace>WpfUndoSampleMVVM.Core</RootNamespace>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Metadata">
+    <Authors>Nathan Allen-Wagner, CGrisselin</Authors>
+    <Description>Monitored Undo Framework - .NET Core MVVM Sample</Description>
+    <Title>Monitored Undo Framework - .NET Core MVVM Sample</Title>
+  </PropertyGroup>
+
+  <ItemGroup Label="Package References">
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+    <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup Label="Project References">
+    <ProjectReference Include="..\..\src\MonitoredUndo\MonitoredUndo.csproj" />
+  </ItemGroup>
+
+</Project>

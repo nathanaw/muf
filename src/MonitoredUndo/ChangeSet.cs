@@ -12,16 +12,16 @@ namespace MonitoredUndo
     public class ChangeSet
     {
 
-        #region Member Variables
+        
 
         private UndoRoot _UndoRoot;
         private string _Description;
         private IList<Change> _Changes;
         private bool _Undone = false;
 
-        #endregion
+        
 
-        #region Constructors
+        
 
         /// <summary>
         /// Create a ChangeSet for the specified UndoRoot.
@@ -39,9 +39,9 @@ namespace MonitoredUndo
                 AddChange(change);
         }
 
-        #endregion
+        
 
-        #region Public Properties
+        
 
         /// <summary>
         /// The associated UndoRoot.
@@ -69,9 +69,9 @@ namespace MonitoredUndo
             }
         }
 
-        #endregion
+        
 
-        #region Internal
+        
 
         /// <summary>
         /// Add a change to this ChangeSet.
@@ -124,7 +124,7 @@ namespace MonitoredUndo
             _Undone = false;
         }
 
-        #endregion
+        
 
     }
 

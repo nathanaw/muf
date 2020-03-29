@@ -12,7 +12,7 @@ namespace MonitoredUndo
     public class UndoRoot
     {
 
-        #region Member Variables
+        
 
         // WeakReference because we don't want the undo stack to keep something locked in memory.
         private WeakReference _Root;
@@ -33,17 +33,17 @@ namespace MonitoredUndo
         // Is the system currently undoing or redoing a changeset.
         private bool _IsUndoingOrRedoing = false;
 
-        #endregion
+        
 
-        #region Events
+        
 
         public event EventHandler UndoStackChanged;
 
         public event EventHandler RedoStackChanged;
 
-        #endregion
+        
 
-        #region Constructors
+        
 
         /// <summary>
         /// Create a new UndoRoot to track undo / redo actions for a given instance / document.
@@ -57,9 +57,9 @@ namespace MonitoredUndo
             _RedoStack = new Stack<ChangeSet>();
         }
 
-        #endregion
+        
 
-        #region Public Properties
+        
 
         /// <summary>
         /// The instance that represents the root (or document) for this set of changes.
@@ -145,9 +145,9 @@ namespace MonitoredUndo
             }
         }
 
-        #endregion
+        
 
-        #region Public Methods
+        
 
         /// <summary>
         /// Tells the UndoRoot that all subsequent changes should be part of a single ChangeSet.
@@ -361,9 +361,9 @@ namespace MonitoredUndo
             OnRedoStackChanged();
         }
 
-        #endregion
+        
 
-        #region Internal
+        
 
         private void OnUndoStackChanged()
         {
@@ -377,7 +377,7 @@ namespace MonitoredUndo
                 RedoStackChanged(this, EventArgs.Empty);
         }
 
-        #endregion
+        
 
     }
 

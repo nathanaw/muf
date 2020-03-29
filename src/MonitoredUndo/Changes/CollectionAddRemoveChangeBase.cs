@@ -11,16 +11,14 @@ namespace MonitoredUndo
     public abstract class CollectionAddRemoveChangeBase : CollectionChange
     {
 
-        #region Member Variables
-
+        
         protected object _RedoElement;
         protected int _RedoIndex;
 
-        #endregion
+        
 
 
-        #region Constructors
-
+        
         public CollectionAddRemoveChangeBase(object target, string propertyName, IList collection, int index, object element)
             : base(target, propertyName, collection,
                    new ChangeKey<object, string, object>(target, propertyName, element))
@@ -32,18 +30,16 @@ namespace MonitoredUndo
             this._RedoIndex = index;
         }
 
-        #endregion
+        
 
-        #region Public Properties
-
+        
         public object Element { get; private set; }
 
         public int Index { get; private set; }
 
-        #endregion
+        
 
-        #region Public Methods
-
+        
         public override void MergeWith(Change latestChange)
         {
             var other = latestChange as CollectionAddRemoveChangeBase;
@@ -55,10 +51,9 @@ namespace MonitoredUndo
             }
         }
 
-        #endregion
+        
 
-        #region Internal
-
+        
         protected string DebuggerDisplay
         {
             get
@@ -69,7 +64,7 @@ namespace MonitoredUndo
             }
         }
 
-        #endregion
+        
     }
 
 

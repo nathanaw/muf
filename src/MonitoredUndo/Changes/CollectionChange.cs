@@ -12,14 +12,14 @@ namespace MonitoredUndo
 
     public abstract class CollectionChange : Change
     {
-        #region Member Variables
+        
 
         private readonly IList _Collection;
         private readonly string _PropertyName;
 
-        #endregion
+        
 
-        #region Constructors
+        
 
         protected CollectionChange(object target, string propertyName, IList collection, object changeKey)
             : base(target, changeKey)
@@ -28,9 +28,9 @@ namespace MonitoredUndo
             this._Collection = collection;
         }
 
-        #endregion
+        
 
-        #region Properties
+        
 
         public IList Collection
         {
@@ -42,7 +42,7 @@ namespace MonitoredUndo
             get { return _PropertyName; }
         }
 
-        #endregion
+        
     }
 
 

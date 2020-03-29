@@ -11,7 +11,7 @@ namespace MonitoredUndo
     public class UndoService
     {
 
-        #region Static Members
+        
 
         private static UndoService _Current;
         private static IDictionary<Type, WeakReference> _CurrentRootInstances;
@@ -90,24 +90,24 @@ namespace MonitoredUndo
             }
         }
 
-        #endregion
+        
 
-        #region Member Variables
+        
 
         private IDictionary<object, UndoRoot> _Roots;
         
-        #endregion
+        
 
-        #region Constructors
+        
 
         public UndoService()
         {
             _Roots = new Dictionary<object, UndoRoot>();
         }
 
-        #endregion
+        
 
-        #region Public Properties
+        
 
         /// <summary>
         /// Get (or create) an UndoRoot for the specified object or document instance.
@@ -136,9 +136,9 @@ namespace MonitoredUndo
             }
         }
 
-        #endregion
+        
 
-        #region Public Methods
+        
         
         /// <summary>
         /// Clear the cached UndoRoots.
@@ -148,7 +148,7 @@ namespace MonitoredUndo
             this._Roots.Clear();
         }
 
-        #endregion
+        
 
     }
 

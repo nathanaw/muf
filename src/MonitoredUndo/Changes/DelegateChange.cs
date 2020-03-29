@@ -14,14 +14,14 @@ namespace MonitoredUndo
     public class DelegateChange : Change
     {
 
-        #region Member Variables
+        
 
         private Action _UndoAction;
         private Action _RedoAction;
 
-        #endregion
+        
 
-        #region Constructors
+        
 
         /// <summary>
         /// Create a new change item.
@@ -44,10 +44,10 @@ namespace MonitoredUndo
             _RedoAction = redoAction; // new WeakReference(redoAction);
         }
 
-        #endregion
+        
 
 
-        #region Public Methods
+        
 
         /// <summary>
         /// When consolidating events, we want to keep the original "Undo"
@@ -62,9 +62,9 @@ namespace MonitoredUndo
                 this._RedoAction = other._RedoAction;
         }
 
-        #endregion
+        
 
-        #region Internal
+        
 
         protected override void PerformUndo()
         {
@@ -80,7 +80,7 @@ namespace MonitoredUndo
                 action();
         }
 
-        #endregion
+        
 
     }
 

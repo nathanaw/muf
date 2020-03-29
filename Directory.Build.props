@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+These properties are auto-imported into projects in child directories.
+-->
+
+<Project>
+
+  <PropertyGroup Label="Build">
+    <Features>IOperation</Features>
+    <DebugType>Full</DebugType>
+
+    <!-- Sets the primary part of the version (before the suffix) for all projects in the solution. -->
+    <VersionPrefix>2.0.0</VersionPrefix>
+  </PropertyGroup>
+
+  <!-- Support nuget pre-release packaging -->
+  <PropertyGroup Label="Package: Release" Condition="'$(VersionSuffix)' == ''">
+    <Version>$(VersionPrefix)</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package: Snapshot" Condition="'$(VersionSuffix)' != ''">
+    <Version>$(VersionPrefix)-$(VersionSuffix)</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Metadata">
+    <Authors>Nathan Allen-Wagner</Authors>
+    <Copyright>Copyright © Alner LLC 2020</Copyright>
+    <Description>Monitored Undo Framework</Description>
+    <Title>Monitored Undo Framework</Title>
+  </PropertyGroup>
+
+  <ItemGroup Label="Analyzers">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.3" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

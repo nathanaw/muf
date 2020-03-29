@@ -8,14 +8,14 @@ namespace MonitoredUndo.Changes
 {
     public abstract class DictionaryChange : Change
     {
-                #region Member Variables
+                
 
         private readonly IDictionary _Collection;
         private readonly string _PropertyName;
 
-        #endregion
+        
 
-        #region Constructors
+        
 
         protected DictionaryChange(object target, string propertyName, IDictionary collection, object changeKey)
             : base(target, changeKey)
@@ -24,9 +24,9 @@ namespace MonitoredUndo.Changes
             this._Collection = collection;
         }
 
-        #endregion
+        
 
-        #region Properties
+        
 
         public IDictionary Collection
         {
@@ -38,7 +38,7 @@ namespace MonitoredUndo.Changes
             get { return _PropertyName; }
         }
 
-        #endregion
+        
 
     }
 }

@@ -11,7 +11,7 @@ namespace MonitoredUndo
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public class CollectionMoveChange : CollectionChange
     {
-        #region Member Variables
+        
 
         private readonly int _NewIndex;
         private readonly int _OldIndex;
@@ -19,9 +19,9 @@ namespace MonitoredUndo
         private int _RedoNewIndex;
         private int _RedoOldIndex;
 
-        #endregion
+        
 
-        #region Constructors
+        
 
         public CollectionMoveChange(object target, string propertyName, IList collection, int newIndex, int oldIndex)
             : base(target, propertyName, collection,
@@ -35,9 +35,9 @@ namespace MonitoredUndo
             this._RedoOldIndex = oldIndex;
         }
 
-        #endregion
+        
 
-        #region Public Properties
+        
 
         public int NewIndex
         {
@@ -49,9 +49,9 @@ namespace MonitoredUndo
             get { return _OldIndex; }
         }
 
-        #endregion
+        
 
-        #region Public Methods
+        
 
         public override void MergeWith(Change latestChange)
         {
@@ -65,9 +65,9 @@ namespace MonitoredUndo
             // FIXME should only affect undo
         }
 
-        #endregion
+        
 
-        #region Internal
+        
 
         protected override void PerformUndo()
         {
@@ -89,7 +89,7 @@ namespace MonitoredUndo
             }
         }
 
-        #endregion
+        
     }
 
 
