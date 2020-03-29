@@ -2,18 +2,36 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    
+
     <!-- Yes, we want a nuget package -->
     <IsPackable>true</IsPackable>
-    
+
     <RootNamespace>MonitoredUndo</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
+
   </PropertyGroup>
 
   <PropertyGroup Label="Metadata">
     <PackageId>MUF</PackageId>
     <Description>Monitored Undo Framework</Description>
     <Title>Monitored Undo Framework</Title>
+    <PackageLicenseFile>license.md</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/nathanaw/muf</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nathanaw/muf</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>
+      Refactor library to use .NET Standard 2.0
+      - Move core library to .NET Standard 2.0
+      - Remove support for older frameworks and runtimes, including Silverlight, WP7, PCL, and .NET 3.5
+      - Upgrade nuget packages to latest versions
+    </PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\license.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
