@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Metadata">
+    <PackageId>MUF</PackageId>
     <Description>Monitored Undo Framework</Description>
     <Title>Monitored Undo Framework</Title>
   </PropertyGroup>
