@@ -14,16 +14,14 @@ namespace MonitoredUndo
     public abstract class Change
     {
 
-        #region Member Variables
-
+        
         private object _Target;
         private bool _Undone = false;
         private object _ChangeKey;
 
-        #endregion
+        
 
-        #region Constructors
-
+        
         /// <summary>
         /// Create a new change item.
         /// </summary>
@@ -42,10 +40,9 @@ namespace MonitoredUndo
             _ChangeKey = changeKey;
         }
 
-        #endregion
+        
 
-        #region Public Properties
-
+        
         /// <summary>
         /// A reference to the object that this change is for.
         /// </summary>
@@ -61,10 +58,9 @@ namespace MonitoredUndo
         /// </summary>
         public bool Undone { get { return _Undone; } }
 
-        #endregion
+        
 
-        #region Public Methods
-
+        
         /// <summary>
         /// When consolidating events, we want to keep the original (first) "Undo"
         /// but use the most recent Redo. This will pull the Redo from the 
@@ -72,10 +68,9 @@ namespace MonitoredUndo
         /// </summary>
         public abstract void MergeWith(Change latestChange);
 
-        #endregion
+        
 
-        #region Internal
-
+        
         /// <summary>
         /// Apply the undo logic from this instance, and raise the ISupportsUndoNotification.UndoHappened event.
         /// </summary>
@@ -114,7 +109,7 @@ namespace MonitoredUndo
         /// </summary>
         protected abstract void PerformRedo();
 
-        #endregion
+        
 
     }
 

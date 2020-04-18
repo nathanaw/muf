@@ -14,13 +14,13 @@ namespace MonitoredUndo
     public class UndoBatch : IDisposable
     {
 
-        #region Member Variables
+        
 
         private UndoRoot _UndoRoot;
 
-        #endregion
+        
 
-        #region Constructors
+        
 
         /// <summary>
         /// Starts an undo batch, which is ended when this instance is disposed. Designed for use in a using statement.
@@ -47,9 +47,9 @@ namespace MonitoredUndo
             root.BeginChangeSetBatch(description, consolidateChangesForSameInstance);
         }
 
-        #endregion
+        
 
-        #region IDisposable Members
+        
 
         private void Dispose(bool disposing)
         {
@@ -69,7 +69,7 @@ namespace MonitoredUndo
             GC.SuppressFinalize(this);
         }
 
-        #endregion
+        
 
     }
 

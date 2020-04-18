@@ -12,16 +12,16 @@ namespace MonitoredUndo
     public class PropertyChange : Change
     {
 
-        #region Member Variables
+        
 
         private readonly string _PropertyName;
         // both should be weak
         private readonly object _OldValue;
         private object _NewValue;
 
-        #endregion
+        
 
-        #region Constructors
+        
 
         public PropertyChange(object instance, string propertyName, object oldValue, object newValue)
             : base(instance, new ChangeKey<object, string>(instance, propertyName))
@@ -31,10 +31,10 @@ namespace MonitoredUndo
             this._NewValue = newValue;
         }
 
-        #endregion
+        
 
 
-        #region Public Properties
+        
 
         public string PropertyName
         {
@@ -51,9 +51,9 @@ namespace MonitoredUndo
             get { return _NewValue; }
         }
 
-        #endregion
+        
 
-        #region Public Methods
+        
 
         /// <summary>
         /// When consolidating events, we want to keep the original "Undo"
@@ -68,9 +68,9 @@ namespace MonitoredUndo
                 this._NewValue = other._NewValue;
         }
 
-        #endregion
+        
 
-        #region Internal
+        
 
         protected override void PerformUndo()
         {
@@ -92,7 +92,7 @@ namespace MonitoredUndo
             }
         }
 
-        #endregion
+        
 
     }
 

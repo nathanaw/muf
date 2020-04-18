@@ -11,7 +11,7 @@ namespace MonitoredUndo
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public class CollectionReplaceChange : CollectionChange
     {
-        #region Member Variables
+        
 
         private readonly int _Index;
         private readonly object _OldItem;
@@ -20,9 +20,9 @@ namespace MonitoredUndo
         private int _RedoIndex;
         private object _RedoNewItem;
 
-        #endregion
+        
 
-        #region Constructors
+        
 
         public CollectionReplaceChange(object target, string propertyName, IList collection,
                                        int index, object oldItem, object newItem)
@@ -38,9 +38,9 @@ namespace MonitoredUndo
             this._RedoNewItem = newItem;
         }
 
-        #endregion
+        
 
-        #region Public Properties
+        
 
         public int Index
         {
@@ -57,9 +57,9 @@ namespace MonitoredUndo
             get { return _NewItem; }
         }
 
-        #endregion
+        
 
-        #region Public Methods
+        
 
         public override void MergeWith(Change latestChange)
         {
@@ -72,9 +72,9 @@ namespace MonitoredUndo
             }
         }
 
-        #endregion
+        
 
-        #region Internal
+        
 
         protected override void PerformUndo()
         {
@@ -96,7 +96,7 @@ namespace MonitoredUndo
             }
         }
 
-        #endregion
+        
     }
 
 

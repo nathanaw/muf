@@ -11,14 +11,14 @@ namespace MonitoredUndo
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public class CollectionRemoveChange : CollectionAddRemoveChangeBase
     {
-        #region Constructors
+        
 
         public CollectionRemoveChange(object target, string propertyName, IList collection, int index, object element)
             : base(target, propertyName, collection, index, element) { }
 
-        #endregion
+        
 
-        #region Internal
+        
 
         protected override void PerformUndo()
         {
@@ -30,7 +30,7 @@ namespace MonitoredUndo
             Collection.Remove(_RedoElement);
         }
 
-        #endregion
+        
     }
 
 

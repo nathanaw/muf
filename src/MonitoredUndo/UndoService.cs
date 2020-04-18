@@ -9,9 +9,7 @@ namespace MonitoredUndo
 {
 
     public class UndoService
-    {
-
-        #region Static Members
+    {        
 
         private static UndoService _Current;
         private static IDictionary<Type, WeakReference> _CurrentRootInstances;
@@ -90,24 +88,20 @@ namespace MonitoredUndo
             }
         }
 
-        #endregion
-
-        #region Member Variables
-
-        private IDictionary<object, UndoRoot> _Roots;
         
-        #endregion
 
-        #region Constructors
+        // Use a weak reference for the key, to prevent memory leaks.
+        private IDictionary<WeakReference, UndoRoot> _Roots;
+
 
         public UndoService()
         {
-            _Roots = new Dictionary<object, UndoRoot>();
+            // Use a custom comparer to compare the WeakReference keys.
+            _Roots = new Dictionary<WeakReference, UndoRoot>(new WeakReferenceComparer());
         }
+      
 
-        #endregion
-
-        #region Public Properties
+        
 
         /// <summary>
         /// Get (or create) an UndoRoot for the specified object or document instance.
@@ -122,23 +116,20 @@ namespace MonitoredUndo
                     return null;
 
                 UndoRoot ret = null;
+                WeakReference wRef = new WeakReference(root);
 
-                if (_Roots.ContainsKey(root))
-                    ret = _Roots[root];
+                if (_Roots.ContainsKey(wRef))
+                    ret = _Roots[wRef];
 
                 if (null == ret)
                 {
                     ret = new UndoRoot(root);
-                    _Roots.Add(root, ret);
+                    _Roots.Add(wRef, ret);
                 }
 
                 return ret;
             }
-        }
-
-        #endregion
-
-        #region Public Methods
+        }       
         
         /// <summary>
         /// Clear the cached UndoRoots.
@@ -147,8 +138,6 @@ namespace MonitoredUndo
         {
             this._Roots.Clear();
         }
-
-        #endregion
 
     }
 

@@ -145,14 +145,13 @@ namespace MonitoredUndo
 
                     break;
 
-#if !SILVERLIGHT
                 case NotifyCollectionChangedAction.Move:
                     var moveChange = new CollectionMoveChange(instance, propertyName, (IList) collection,
                                                               e.NewStartingIndex,
                                                               e.OldStartingIndex);
                     ret.Add(moveChange);
                     break;
-#endif
+
                 case NotifyCollectionChangedAction.Replace:
                     for (int i = 0; i < e.OldItems.Count; i++)
                     {
