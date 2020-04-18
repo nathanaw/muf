@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".assets", ".assets", "{7C8B148F-D9DF-4838-AA00-E267C3A9172A}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		BUILDING.md = BUILDING.md
 		Directory.Build.props = Directory.Build.props
 		license.md = license.md
 		README.md = README.md
@@ -13,12 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".assets", ".assets", "{7C8B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{58941425-BFC3-4DC9-8A6C-EDD42B8A9FDB}"
 	ProjectSection(SolutionItems) = preProject
-		docs\Documentation.html = docs\Documentation.html
-		docs\Home.html = docs\Home.html
-		docs\Monitored Undo Documentation.docx = docs\Monitored Undo Documentation.docx
-		docs\Monitored Undo Documentation.html = docs\Monitored Undo Documentation.html
-		docs\Monitored Undo Documentation_UndoClassDiagram_2.png = docs\Monitored Undo Documentation_UndoClassDiagram_2.png
-		docs\Monitored Undo Documentation_UndoClassDiagram_thumb.png = docs\Monitored Undo Documentation_UndoClassDiagram_thumb.png
+		docs\ClassDiagram.png = docs\ClassDiagram.png
+		docs\README.md = docs\README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F1F7AC76-9E13-4D8B-93E8-6AD4DAAF599C}"
