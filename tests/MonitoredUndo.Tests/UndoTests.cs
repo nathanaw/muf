@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using MonitoredUndo;
 using MonitoredUndo.Tests;
+using System.Threading;
 
 namespace MonitoredUndo.Tests
 {
@@ -55,6 +56,49 @@ namespace MonitoredUndo.Tests
         {
             var undoRoot = UndoService.Current[Document1];
             Assert.IsNotNull(undoRoot);
+        }
+
+        [TestMethod]
+        public void UndoService_Returns_Same_Root()
+        {
+            var undoRoot1 = UndoService.Current[Document1];
+            var undoRoot2 = UndoService.Current[Document1];
+            Assert.IsNotNull(undoRoot1);
+            Assert.IsNotNull(undoRoot2);
+            Assert.IsTrue(ReferenceEquals(undoRoot1, undoRoot2));
+        }
+        
+        [TestMethod]
+        public void UndoService_Uses_WeakReferences()
+        {
+            // Create a root, but don't keep any references to the object that it is for.
+            UndoRoot undoRoot = null;
+            WeakReference wrDoc = GetWeakReference(out undoRoot);
+
+            // Confirm the object is still alive.
+            Assert.IsNotNull(undoRoot);
+            Assert.IsTrue(wrDoc.IsAlive);
+
+            // Force a GC to collect the document used for the undo root.
+            // Don't do this in normal code... this is just for testing.
+            GC.Collect(1, GCCollectionMode.Forced, true);
+
+            // Confirm the RootDocument was collected.
+            // This shows that we're not leaking memory via the UndoService's _Roots dictionary.
+            Assert.IsFalse(wrDoc.IsAlive);
+            Assert.IsNull(wrDoc.Target);
+
+
+            // Inline function.
+            // This method is part of UndoService_Uses_WeakReferences.
+            // Code is in a separate method so that the variables are properly scoped
+            // which allows the GC call to work properly.
+            WeakReference GetWeakReference(out UndoRoot undoRoot)
+            {
+                var document = new RootDocument();          // Constructed, but not returned.
+                undoRoot = UndoService.Current[document];   // This creates a weakly referenced undo root.
+                return new WeakReference(document);         // Return a weak reference so that we can test if the document was collected.
+            }
         }
 
         [TestMethod]
@@ -843,6 +887,25 @@ namespace MonitoredUndo.Tests
         }
 
 
+        [TestMethod]
+        public void WeakReferences_Are_Equal()
+        {
+            var testObject = new object();
+            var wRef1 = new WeakReference(testObject);
+            var wRef2 = new WeakReference(testObject);
+            var comparer = new WeakReferenceComparer();
+
+            Assert.AreNotEqual(wRef1, wRef2);
+            Assert.IsFalse(wRef1.Equals(wRef2));
+            Assert.IsFalse(wRef1 == wRef2);
+
+            Assert.IsTrue(comparer.Equals(wRef1, wRef2));
+            Assert.IsFalse(comparer.Equals(null, wRef2));
+            Assert.IsFalse(comparer.Equals(wRef1, null));
+        }
+
+
+
         private static void CompareChangeKeys<T1, T2>(T1 a1, T2 a2, T1 b1, T2 b2)
         {
             var key1 = new ChangeKey<T1, T2>(a1, a2);
@@ -853,12 +916,7 @@ namespace MonitoredUndo.Tests
             Assert.IsTrue(key1.Equals(key2));
             Assert.AreEqual(key1.GetHashCode(), key2.GetHashCode());
             Assert.AreEqual(key1.ToString(), key2.ToString());
-        }
-
-
-
-
-        
+        }        
 
     }
 }
