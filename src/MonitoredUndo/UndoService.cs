@@ -7,9 +7,9 @@ using System.Collections;
 
 namespace MonitoredUndo
 {
-
-    public class UndoService
-    {        
+    /// <inheritdoc cref="IUndoService"/>
+    public class UndoService : IUndoService
+    {
 
         private static UndoService _Current;
         private static IDictionary<Type, WeakReference> _CurrentRootInstances;
@@ -88,7 +88,7 @@ namespace MonitoredUndo
             }
         }
 
-        
+
 
         // Use a weak reference for the key, to prevent memory leaks.
         private IDictionary<WeakReference, UndoRoot> _Roots;
@@ -99,15 +99,11 @@ namespace MonitoredUndo
             // Use a custom comparer to compare the WeakReference keys.
             _Roots = new Dictionary<WeakReference, UndoRoot>(new WeakReferenceComparer());
         }
-      
 
-        
 
-        /// <summary>
-        /// Get (or create) an UndoRoot for the specified object or document instance.
-        /// </summary>
-        /// <param name="root">The object that represents the root of the document or object hierarchy.</param>
-        /// <returns>An UndoRoot instance for this object.</returns>
+
+
+        /// <inheritdoc cref="IUndoService.this[object]"/>
         public UndoRoot this[object root]
         {
             get
@@ -129,11 +125,9 @@ namespace MonitoredUndo
 
                 return ret;
             }
-        }       
-        
-        /// <summary>
-        /// Clear the cached UndoRoots.
-        /// </summary>
+        }
+
+        /// <inheritdoc cref="IUndoService.Clear"/>
         public void Clear()
         {
             this._Roots.Clear();

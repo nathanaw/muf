@@ -11,10 +11,10 @@ using MonitoredUndo.Changes;
 
 namespace MonitoredUndo
 {
-
-    public class ChangeFactory
+    /// <inheritdoc cref="IChangeFactory"/>
+    public class ChangeFactory : IChangeFactory
     {
-
+        /// <inheritdoc cref="IChangeFactory.ThrowExceptionOnCollectionResets"/>
         public bool ThrowExceptionOnCollectionResets
         {
             get { return _ThrowExceptionOnCollectionResets; }
@@ -23,14 +23,7 @@ namespace MonitoredUndo
         private bool _ThrowExceptionOnCollectionResets = true;
 
 
-        /// <summary>
-        /// Construct a Change instance with actions for undo / redo.
-        /// </summary>
-        /// <param name="instance">The instance that changed.</param>
-        /// <param name="propertyName">The property name that changed. (Case sensitive, used by reflection.)</param>
-        /// <param name="oldValue">The old value of the property.</param>
-        /// <param name="newValue">The new value of the property.</param>
-        /// <returns>A Change that can be added to the UndoRoot's undo stack.</returns>
+        /// <inheritdoc cref="IChangeFactory.GetChange(object, string, object, object)"/>
         public virtual Change GetChange(object instance, string propertyName, object oldValue, object newValue)
         {
             var undoMetadata = instance as IUndoMetadata;
@@ -45,26 +38,13 @@ namespace MonitoredUndo
             return change;
         }
 
-        /// <summary>
-        /// Construct a Change instance with actions for undo / redo.
-        /// </summary>
-        /// <param name="instance">The instance that changed.</param>
-        /// <param name="propertyName">The property name that changed. (Case sensitive, used by reflection.)</param>
-        /// <param name="oldValue">The old value of the property.</param>
-        /// <param name="newValue">The new value of the property.</param>
+        /// <inheritdoc cref="IChangeFactory.OnChanging(object, string, object, object)"/>
         public virtual void OnChanging(object instance, string propertyName, object oldValue, object newValue)
         {
             OnChanging(instance, propertyName, oldValue, newValue, propertyName);
         }
 
-        /// <summary>
-        /// Construct a Change instance with actions for undo / redo.
-        /// </summary>
-        /// <param name="instance">The instance that changed.</param>
-        /// <param name="propertyName">The property name that changed. (Case sensitive, used by reflection.)</param>
-        /// <param name="oldValue">The old value of the property.</param>
-        /// <param name="newValue">The new value of the property.</param>
-        /// <param name="descriptionOfChange">A description of this change.</param>
+        /// <inheritdoc cref="IChangeFactory.OnChanging(object, string, object, object, string)"/>
         public virtual void OnChanging(object instance, string propertyName, object oldValue, object newValue, string descriptionOfChange)
         {
             var supportsUndo = instance as ISupportsUndo;
@@ -80,14 +60,7 @@ namespace MonitoredUndo
             UndoService.Current[root].AddChange(change, descriptionOfChange);
         }
 
-        /// <summary>
-        /// Construct a Change instance with actions for undo / redo.
-        /// </summary>
-        /// <param name="instance">The instance that changed.</param>
-        /// <param name="propertyName">The property name that exposes the collection that changed. (Case sensitive, used by reflection.)</param>
-        /// <param name="collection">The collection that had an item added / removed.</param>
-        /// <param name="e">The NotifyCollectionChangedEventArgs event args parameter, with info about the collection change.</param>
-        /// <returns>A Change that can be added to the UndoRoot's undo stack.</returns>
+        /// <inheritdoc cref="IChangeFactory.GetCollectionChange(object, string, object, NotifyCollectionChangedEventArgs)"/>
         public virtual IList<Change> GetCollectionChange(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e)
         {
             var undoMetadata = instance as IUndoMetadata;
@@ -104,7 +77,7 @@ namespace MonitoredUndo
                 case NotifyCollectionChangedAction.Add:
                     foreach (var item in e.NewItems)
                     {
-                        Change change = null; 
+                        Change change = null;
                         if (collection as IList != null)
                         {
                             change = new CollectionAddChange(instance, propertyName, (IList)collection,
@@ -116,7 +89,7 @@ namespace MonitoredUndo
                             var keyProperty = item.GetType().GetProperty("Key");
                             var valueProperty = item.GetType().GetProperty("Value");
                             change = new DictionaryAddChange(instance, propertyName, (IDictionary)collection,
-                                                                 keyProperty.GetValue(item, null), valueProperty.GetValue(item, null));                            
+                                                                 keyProperty.GetValue(item, null), valueProperty.GetValue(item, null));
                         }
                         ret.Add(change);
                     }
@@ -146,7 +119,7 @@ namespace MonitoredUndo
                     break;
 
                 case NotifyCollectionChangedAction.Move:
-                    var moveChange = new CollectionMoveChange(instance, propertyName, (IList) collection,
+                    var moveChange = new CollectionMoveChange(instance, propertyName, (IList)collection,
                                                               e.NewStartingIndex,
                                                               e.OldStartingIndex);
                     ret.Add(moveChange);
@@ -156,7 +129,7 @@ namespace MonitoredUndo
                     for (int i = 0; i < e.OldItems.Count; i++)
                     {
                         Change change = null;
-                        
+
                         if (collection as IList != null)
                         {
                             change = new CollectionReplaceChange(instance, propertyName, (IList)collection,
@@ -188,26 +161,13 @@ namespace MonitoredUndo
             return ret;
         }
 
-        /// <summary>
-        /// Construct a Change instance with actions for undo / redo.
-        /// </summary>
-        /// <param name="instance">The instance that changed.</param>
-        /// <param name="propertyName">The property name that exposes the collection that changed. (Case sensitive, used by reflection.)</param>
-        /// <param name="collection">The collection that had an item added / removed.</param>
-        /// <param name="e">The NotifyCollectionChangedEventArgs event args parameter, with info about the collection change.</param>
+        /// <inheritdoc cref="IChangeFactory.OnCollectionChanged(object, string, object, NotifyCollectionChangedEventArgs)"/>
         public virtual void OnCollectionChanged(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e)
         {
             OnCollectionChanged(instance, propertyName, collection, e, propertyName);
         }
 
-        /// <summary>
-        /// Construct a Change instance with actions for undo / redo.
-        /// </summary>
-        /// <param name="instance">The instance that changed.</param>
-        /// <param name="propertyName">The property name that exposes the collection that changed. (Case sensitive, used by reflection.)</param>
-        /// <param name="collection">The collection that had an item added / removed.</param>
-        /// <param name="e">The NotifyCollectionChangedEventArgs event args parameter, with info about the collection change.</param>
-        /// <param name="descriptionOfChange">A description of the change.</param>
+        /// <inheritdoc cref="IChangeFactory.OnCollectionChanged(object, string, object, NotifyCollectionChangedEventArgs, string)"/>
         public virtual void OnCollectionChanged(object instance, string propertyName, object collection, NotifyCollectionChangedEventArgs e, string descriptionOfChange)
         {
             var supportsUndo = instance as ISupportsUndo;
