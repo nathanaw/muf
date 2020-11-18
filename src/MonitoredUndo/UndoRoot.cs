@@ -18,8 +18,8 @@ namespace MonitoredUndo
         private WeakReference _Root;
 
         // The list of undo / redo actions.
-        private Stack<ChangeSet> _UndoStack;
-        private Stack<ChangeSet> _RedoStack;
+        private ObservableStack<ChangeSet> _UndoStack;
+        private ObservableStack<ChangeSet> _RedoStack;
 
         // Tracks whether a batch (or batches) has been started.
         private int _IsInBatchCounter = 0;
@@ -53,8 +53,8 @@ namespace MonitoredUndo
         public UndoRoot(object root)
         {
             _Root = new WeakReference(root);
-            _UndoStack = new Stack<ChangeSet>();
-            _RedoStack = new Stack<ChangeSet>();
+            _UndoStack = new ObservableStack<ChangeSet>();
+            _RedoStack = new ObservableStack<ChangeSet>();
         }
 
         
