@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -303,6 +304,132 @@ namespace MonitoredUndo.Tests
             finally
             {
                 undoRoot.UndoStackChanged -= callback;
+            }
+        }
+
+        [TestMethod]
+        public void UndoRoot_UndoStack_Implements_INotifyCollectionChanged()
+        {
+            string orig = Document1.A.Name;
+            var undoRoot = UndoService.Current[Document1];
+            Assert.IsInstanceOfType(undoRoot.UndoStack, typeof(INotifyCollectionChanged));
+
+            bool wasCalledForAdd = false;
+            bool wasCalledForRemove = false;
+            bool wasCalledForReset = false;
+
+            var callback = new NotifyCollectionChangedEventHandler((s, e) =>
+            {
+                switch (e.Action)
+                {
+                    case NotifyCollectionChangedAction.Add:
+                        wasCalledForAdd = true;
+                        break;
+                    case NotifyCollectionChangedAction.Remove:
+                        wasCalledForRemove = true;
+                        break;
+                    case NotifyCollectionChangedAction.Reset:
+                        wasCalledForReset = true;
+                        break;
+                }
+            });
+
+            ((INotifyCollectionChanged)undoRoot.UndoStack).CollectionChanged += callback;
+
+            try
+            {
+                Document1.A.Name = "Updated1";
+                Assert.IsTrue(wasCalledForAdd);
+                Assert.IsFalse(wasCalledForRemove);
+                Assert.IsFalse(wasCalledForReset);
+
+                wasCalledForAdd = false;
+
+                undoRoot.Undo();
+                Assert.IsTrue(wasCalledForRemove);
+                Assert.IsFalse(wasCalledForAdd);
+                Assert.IsFalse(wasCalledForReset);
+
+                wasCalledForRemove = false;
+
+                undoRoot.Redo();
+                Assert.IsTrue(wasCalledForAdd);
+                Assert.IsFalse(wasCalledForRemove);
+                Assert.IsFalse(wasCalledForReset);
+
+                wasCalledForAdd = false;
+
+                undoRoot.Clear();
+                Assert.IsTrue(wasCalledForReset);
+                Assert.IsFalse(wasCalledForAdd);
+                Assert.IsFalse(wasCalledForRemove);
+            }
+            finally
+            {
+                ((INotifyCollectionChanged)undoRoot.UndoStack).CollectionChanged -= callback;
+            }
+        }
+
+        [TestMethod]
+        public void UndoRoot_RedoStack_Implements_INotifyCollectionChanged()
+        {
+            string orig = Document1.A.Name;
+            var undoRoot = UndoService.Current[Document1];
+            Assert.IsInstanceOfType(undoRoot.RedoStack, typeof(INotifyCollectionChanged));
+
+            bool wasCalledForAdd = false;
+            bool wasCalledForRemove = false;
+            bool wasCalledForReset = false;
+
+            var callback = new NotifyCollectionChangedEventHandler((s, e) =>
+            {
+                switch (e.Action)
+                {
+                    case NotifyCollectionChangedAction.Add:
+                        wasCalledForAdd = true;
+                        break;
+                    case NotifyCollectionChangedAction.Remove:
+                        wasCalledForRemove = true;
+                        break;
+                    case NotifyCollectionChangedAction.Reset:
+                        wasCalledForReset = true;
+                        break;
+                }
+            });
+
+            ((INotifyCollectionChanged)undoRoot.RedoStack).CollectionChanged += callback;
+
+            try
+            {
+                Document1.A.Name = "Updated1";
+                Assert.IsTrue(wasCalledForReset, "Redo stack CollectionChanged event should have been called with NotifyCollectionChangedAction.Reset args because of the new change pruning the redo stack.");
+                Assert.IsFalse(wasCalledForAdd);
+                Assert.IsFalse(wasCalledForRemove);
+
+                wasCalledForReset = false;
+
+                undoRoot.Undo();
+                Assert.IsTrue(wasCalledForAdd);
+                Assert.IsFalse(wasCalledForRemove);
+                Assert.IsFalse(wasCalledForReset);
+
+                wasCalledForAdd = false;
+
+                undoRoot.Redo();
+                Assert.IsTrue(wasCalledForRemove);
+                Assert.IsFalse(wasCalledForAdd);
+                Assert.IsFalse(wasCalledForReset);
+
+                wasCalledForRemove = false;
+
+                undoRoot.Clear();
+                Assert.IsTrue(wasCalledForReset);
+                Assert.IsFalse(wasCalledForAdd);
+                Assert.IsFalse(wasCalledForRemove);
+            }
+            finally
+            {
+                ((INotifyCollectionChanged)undoRoot.RedoStack).CollectionChanged -= callback;
             }
         }
 

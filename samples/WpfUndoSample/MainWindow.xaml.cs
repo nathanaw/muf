@@ -42,24 +42,7 @@ namespace WpfUndoSample
 
         private void LayoutRoot_Loaded(object sender, RoutedEventArgs e)
         {
-            // The undo / redo stack collections are not "Observable", so we 
-            // need to manually refresh the UI when they change.
-            var root = UndoService.Current[this];
-            root.UndoStackChanged += new EventHandler(OnUndoStackChanged);
-            root.RedoStackChanged += new EventHandler(OnRedoStackChanged);
             FirstNameTextbox.Focus();
-        }
-
-        // Refresh the UI when the undo stack changes.
-        void OnUndoStackChanged(object sender, EventArgs e)
-        {
-            RefreshUndoStackList();
-        }
-
-        // Refresh the UI when the redo stack changes.
-        void OnRedoStackChanged(object sender, EventArgs e)
-        {
-            RefreshUndoStackList();
         }
 
 
@@ -245,18 +228,6 @@ namespace WpfUndoSample
         
 
         
-
-        // Refresh the UI when the undo / redo stacks change.
-        private void RefreshUndoStackList()
-        {
-            // Calling refresh on the CollectionView will tell the UI to rebind the list.
-            // If the list were an ObservableCollection, or implemented INotifyCollectionChanged, this would not be needed.
-            var cv = CollectionViewSource.GetDefaultView(UndoStack);
-            cv.Refresh();  
-
-            cv = CollectionViewSource.GetDefaultView(RedoStack);
-            cv.Refresh();
-        }
 
         
 
